@@ -183,7 +183,7 @@ function drawTarget(i)
 
   // Highlights next target
   if (current_trial < 47 && trials[current_trial + 1] === i) {
-    stroke(color(255, 92, 92));
+    stroke(color(255, 255, 92));
     strokeWeight(4);
     circle(target.x, target.y, target.w);
   }
@@ -198,7 +198,7 @@ function drawTarget(i)
     // Remember you are allowed to access targets (i-1) and (i+1)
     // if this is the target the user should be trying to select
     //
-    fill(color(255, 0, 0));
+    fill(color(255, 255, 0));
     circle(target.x, target.y, target.w);
   }
   // Does not draw a border if this is not the target the user
