@@ -196,7 +196,7 @@ function drawTarget(i)
     noStroke();          
 
     // Draws the target
-    fill(color(25,25,25));    // 155        
+    fill(color(125,125,125));    // Não pode ser menos!
     circle(target.x, target.y, target.w);
   }
 }
