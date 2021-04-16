@@ -149,10 +149,9 @@ function mousePressed()
       fitts = Math.log2(distance / width + 1)
     } else {
       misses++;
-    } 
+    }
     if (current_trial < 47) {
       fitts_IDs.push(fitts)
-      console.log(fitts)
     }
     
     current_trial++;                 // Move on to the next trial/target
