@@ -198,7 +198,7 @@ function drawTarget(i)
     // Remember you are allowed to access targets (i-1) and (i+1)
     // if this is the target the user should be trying to select
     //
-    fill(color(66, 133, 244));
+    fill(color(255, 0, 0));
     circle(target.x, target.y, target.w);
   }
   // Does not draw a border if this is not the target the user
