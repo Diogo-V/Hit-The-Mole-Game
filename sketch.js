@@ -23,7 +23,7 @@ let database;                  // Firebase DB
 
 // Study control parameters
 let draw_targets     = false;  // used to control what to show in draw()
-let trials 			 = [];     // contains the order of targets that activate in the test
+let trials 			     = [];     // contains the order of targets that activate in the test
 let current_trial    = 0;      // the current trial number (indexes into trials array above)
 let attempt          = 0;      // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs        = [];     // add the Fitts ID for each selection here (-1 when there is a miss)
@@ -170,25 +170,35 @@ function drawTarget(i)
   // Get the location and size for target (i)
   let target = getTargetBounds(i);             
 
+  // Highlights next target
+  if (current_trial + 1 < 48 && trials[current_trial + 1] === i) {
+    stroke(color(255,0, 0));
+    strokeWeight(4);
+    circle(target.x, target.y, target.w);
+  }
   // Check whether this target is the target the user should be trying to select
   if (trials[current_trial] === i) 
   { 
     // Highlights the target the user should be trying to select
     // with a white border
-    stroke(color(220,220,220));
-    strokeWeight(2);
+    // stroke(color(220,220,220));
+    // strokeWeight(2);
     
     // Remember you are allowed to access targets (i-1) and (i+1)
     // if this is the target the user should be trying to select
     //
+    fill(color(66, 133, 255)); // 244
+    circle(target.x, target.y, target.w);
   }
   // Does not draw a border if this is not the target the user
   // should be trying to select
-  else noStroke();          
+  else {
+    noStroke();          
 
-  // Draws the target
-  fill(color(155,155,155));          
-  circle(target.x, target.y, target.w);
+    // Draws the target
+    fill(color(25,25,25));    // 155        
+    circle(target.x, target.y, target.w);
+  }
 }
 
 // Returns the location and size of a given target
