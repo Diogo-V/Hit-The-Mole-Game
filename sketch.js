@@ -73,7 +73,7 @@ function draw()
 function printAndSavePerformance()
 {
   // DO NOT CHANGE THESE! 
-  let accuracy			= parseFloat(hits * 100) / parseFloat(hits + misses);
+  let accuracy			    = parseFloat(hits * 100) / parseFloat(hits + misses);
   let test_time         = (testEndTime - testStartTime) / 1000;
   let time_per_target   = nf((test_time) / parseFloat(hits + misses), 0, 3);
   let penalty           = constrain((((parseFloat(95) - (parseFloat(hits * 100) / parseFloat(hits + misses))) * 0.2)), 0, 100);
@@ -140,8 +140,20 @@ function mousePressed()
     
     // Check to see if the mouse cursor is inside the target bounds,
     // increasing either the 'hits' or 'misses' counters
-    if (dist(target.x, target.y, mouseX, mouseY) < target.w/2)  hits++;                                                       
-    else misses++;
+    let fitts = -1
+    if (dist(target.x, target.y, mouseX, mouseY) < target.w/2) {
+      hits++; 
+      let nextTarget = getTargetBounds(trials[current_trial + 1]);
+      let distance = dist(nextTarget.x, nextTarget.y, mouseX, mouseY)
+      let width = nextTarget.w
+      fitts = Math.log2(distance / width + 1)
+    } else {
+      misses++;
+    } 
+    if (current_trial < 47) {
+      fitts_IDs.push(fitts)
+      console.log(fitts)
+    }
     
     current_trial++;                 // Move on to the next trial/target
     
@@ -171,8 +183,8 @@ function drawTarget(i)
   let target = getTargetBounds(i);             
 
   // Highlights next target
-  if (current_trial + 1 < 48 && trials[current_trial + 1] === i) {
-    stroke(color(255,0, 0));
+  if (current_trial < 47 && trials[current_trial + 1] === i) {
+    stroke(color(255, 92, 92));
     strokeWeight(4);
     circle(target.x, target.y, target.w);
   }
@@ -187,7 +199,7 @@ function drawTarget(i)
     // Remember you are allowed to access targets (i-1) and (i+1)
     // if this is the target the user should be trying to select
     //
-    fill(color(66, 133, 255)); // 244
+    fill(color(66, 133, 244));
     circle(target.x, target.y, target.w);
   }
   // Does not draw a border if this is not the target the user
