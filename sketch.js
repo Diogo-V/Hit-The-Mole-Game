@@ -126,6 +126,21 @@ function printAndSavePerformance()
     let db_ref = database.ref('G' + GROUP_NUMBER);
     db_ref.push(attempt_data);
   }
+
+  // Custom finale
+    if (accuracy >= 95 && target_w_penalty > 0.563 && target_w_penalty <= 0.631){
+        var audio = new Audio('Super Mario Stage Clear Sound.mp3');
+        audio.play();
+    }
+    else if (accuracy < 95 || target_w_penalty > 0.631){
+        var audio = new Audio('Super Mario Game Over Sound.mp3');
+        audio.play();
+    }
+    else {
+        var audio = new Audio('Super Mario World Clear Sound.mp3')
+        audio.play();
+    }
+
 }
 
 // Mouse button was pressed - lets test to see if hit was in the correct target
@@ -142,12 +157,18 @@ function mousePressed()
     // increasing either the 'hits' or 'misses' counters
     let fitts = -1
     if (dist(target.x, target.y, mouseX, mouseY) < target.w/2) {
+      var audio = new Audio('Super Mario Coin Sound.mp3');
+      audio.play();
+
       hits++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
       let distance = dist(nextTarget.x, nextTarget.y, mouseX, mouseY)
       let width = nextTarget.w
       fitts = Math.log2(distance / width + 1)
     } else {
+      var audio = new Audio('Super Mario Firework Sound.mp3');
+      audio.play();
+
       misses++;
     }
     if (current_trial < 47) {
