@@ -28,6 +28,9 @@ let current_trial    = 0;      // the current trial number (indexes into trials 
 let attempt          = 0;      // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs        = [];     // add the Fitts ID for each selection here (-1 when there is a miss)
 
+let img1;
+let img2;
+
 // Target class (position and width)
 class Target
 {
@@ -37,6 +40,11 @@ class Target
     this.y = y;
     this.w = w;
   }
+}
+
+function preload(){
+  img1 = loadImage("./img/Mush-Red.png");
+  //img2 = loadImage("./img/Mush-Yellow2.png"); 
 }
 
 // Runs once at the start
@@ -154,6 +162,8 @@ function mousePressed()
       fitts_IDs.push(fitts)
     }
 
+    console.log(fitts_IDs);
+
     current_trial++;                 // Move on to the next trial/target
 
     // Check if the user has completed all 48 trials
@@ -180,26 +190,29 @@ function drawTarget(i)
 {
   // Get the location and size for target (i)
   let target = getTargetBounds(i);
+  
 
   // Highlights next target
   if (current_trial < 47 && trials[current_trial + 1] === i) {
     stroke(color(255, 255, 0));
     strokeWeight(8);
+    //imageMode(CENTER);
+    //img2.resize(target.w, target.w);
+    //image(img2, target.x, target.y);
     circle(target.x, target.y, target.w);
   }
   // Check whether this target is the target the user should be trying to select
   if (trials[current_trial] === i)
   {
-    // Highlights the target the user should be trying to select
-    // with a white border
-    // stroke(color(220,220,220));
-    // strokeWeight(2);
-
     // Remember you are allowed to access targets (i-1) and (i+1)
     // if this is the target the user should be trying to select
     //
-    fill(color(255, 0, 0));
-    circle(target.x, target.y, target.w);
+    //fill(color(255, 0, 0));
+    //let circle1 = circle(target.x, target.y, target.w);
+    imageMode(CENTER);
+    img1.resize(target.w, target.w);
+    image(img1, target.x, target.y);
+    //img1.mask(circle1);
   }
   // Does not draw a border if this is not the target the user
   // should be trying to select
