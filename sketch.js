@@ -28,6 +28,14 @@ let current_trial    = 0;      // the current trial number (indexes into trials 
 let attempt          = 0;      // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs        = [];     // add the Fitts ID for each selection here (-1 when there is a miss)
 
+// Game variables
+let hit_streak       = 0;
+let img
+
+function preload() {
+  img = loadImage("assets/mario-coin.png")
+}
+
 // Target class (position and width)
 class Target
 {
@@ -61,12 +69,19 @@ function draw()
 
     // Print trial count at the top left-corner of the canvas
     fill(color(255,255,255));
-    textAlign(LEFT);
+    // textAlign(LEFT);
     text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
+    hitStreak()
 
     // Draw all 16 targets
-	for (var i = 0; i < 16; i++) drawTarget(i);
+  for (var i = 0; i < 16; i++) drawTarget(i);
+  drawVector()  // Draw path between targets on the canvas
   }
+}
+
+function hitStreak() {
+  image(img, 760, 0, 30, 30)
+  text("Hit streak: " + hit_streak, 800, 20)
 }
 
 // Print and save results at the end of 48 trials
@@ -143,16 +158,20 @@ function mousePressed()
     let fitts = -1
     if (dist(target.x, target.y, mouseX, mouseY) < target.w/2) {
       hits++;
+      hit_streak++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
       let distance = dist(nextTarget.x, nextTarget.y, mouseX, mouseY)
       let width = nextTarget.w
       fitts = Math.log2(distance / width + 1)
     } else {
       misses++;
+      hit_streak = 0;
     }
     if (current_trial < 47) {
       fitts_IDs.push(fitts)
     }
+
+    console.log(hit_streak)
 
     current_trial++;                 // Move on to the next trial/target
 
@@ -175,19 +194,40 @@ function mousePressed()
   }
 }
 
-// draw an arrow for a vector at a given base position
-function drawArrow(base, vec, myColor) {
-  push();
-  stroke(myColor);
-  strokeWeight(3);
-  fill(myColor);
-  translate(base.x, base.y);
-  line(0, 0, vec.x, vec.y);
-  rotate(vec.heading());
-  let arrowSize = 7;
-  translate(vec.mag() - arrowSize, 0);
-  triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
-  pop();
+function drawVector() {
+  let fillColor = "white"
+  if (current_trial < 47) {
+    let target = getTargetBounds(trials[current_trial]);
+    let v0 = createVector(target.x, target.y);
+    let nextTarget = getTargetBounds(trials[current_trial + 1]);
+    let v1 = createVector(nextTarget.x, nextTarget.y);
+    push();
+    stroke(fillColor);
+    strokeWeight(3);
+    fill(fillColor);
+    line(v0.x, v0.y, v1.x, v1.y);
+    pop();
+    push();
+
+    // Arrow
+    if (nextTarget.y != target.y || nextTarget.x != target.x){
+
+      fill(fillColor);
+      translate(nextTarget.x, nextTarget.y);
+
+      if (nextTarget.y-target.y === 0){
+        if (nextTarget.x-target.x < 0) rotate(PI);
+        else if (nextTarget.x-target.x > 0) rotate(0);
+      }
+      else if (nextTarget.x-target.x < 0) rotate(PI+Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
+      else rotate(Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
+      
+      triangle(target.w, 0, (target.w/2)+5, -(target.w/4), (target.w/2)+5, (target.w/4));
+
+    }
+
+    pop();
+  }
 }
 
 // Draw target on-screen
@@ -202,6 +242,7 @@ function drawTarget(i)
     strokeWeight(8);
     circle(target.x, target.y, target.w);
   }
+
   // Check whether this target is the target the user should be trying to select
   if (trials[current_trial] === i)
   {
@@ -215,13 +256,6 @@ function drawTarget(i)
     //
     fill(color(255, 0, 0));
     circle(target.x, target.y, target.w);
-
-    if (current_trial < 47) {
-      let v0 = createVector(target.x, target.y);
-      let nextTarget = getTargetBounds(trials[current_trial + 1]);
-      let v1 = createVector(nextTarget.x, nextTarget.y);
-      drawArrow(v0, v1, 'white');
-    }
 
   }
   // Does not draw a border if this is not the target the user
@@ -257,6 +291,7 @@ function continueTest()
   hits = 0;
   misses = 0;
   fitts_IDs = [];
+  hit_streak = 0;
 
   continue_button.remove();
 
