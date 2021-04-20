@@ -213,11 +213,11 @@ function drawVector() {
     if (nextTarget.y != target.y || nextTarget.x != target.x){
 
       fill(fillColor);
-      translate(nextTarget.x, nextTarget.y);
+      translate(target.x, target.y);
 
-      if (nextTarget.y-target.y === 0){
-        if (nextTarget.x-target.x < 0) rotate(PI);
-        else if (nextTarget.x-target.x > 0) rotate(0);
+      if (nextTarget.y-target.y === 0) {
+        if (nextTarget.x-target.x < 0) rotate(PI);  
+        else if (nextTarget.x-target.x > 0) rotate(0); 
       }
       else if (nextTarget.x-target.x < 0) rotate(PI+Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
       else rotate(Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
