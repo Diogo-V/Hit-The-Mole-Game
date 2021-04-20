@@ -175,6 +175,21 @@ function mousePressed()
   }
 }
 
+// draw an arrow for a vector at a given base position
+function drawArrow(base, vec, myColor) {
+  push();
+  stroke(myColor);
+  strokeWeight(3);
+  fill(myColor);
+  translate(base.x, base.y);
+  line(0, 0, vec.x, vec.y);
+  rotate(vec.heading());
+  let arrowSize = 7;
+  translate(vec.mag() - arrowSize, 0);
+  triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+  pop();
+}
+
 // Draw target on-screen
 function drawTarget(i)
 {
@@ -200,6 +215,14 @@ function drawTarget(i)
     //
     fill(color(255, 0, 0));
     circle(target.x, target.y, target.w);
+
+    if (current_trial < 47) {
+      let v0 = createVector(target.x, target.y);
+      let nextTarget = getTargetBounds(trials[current_trial + 1]);
+      let v1 = createVector(nextTarget.x, nextTarget.y);
+      drawArrow(v0, v1, 'white');
+    }
+
   }
   // Does not draw a border if this is not the target the user
   // should be trying to select
@@ -210,6 +233,7 @@ function drawTarget(i)
     fill(color(125,125,125));    // Não pode ser menos!
     circle(target.x, target.y, target.w);
   }
+
 }
 
 // Returns the location and size of a given target
