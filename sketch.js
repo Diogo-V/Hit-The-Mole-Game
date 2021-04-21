@@ -42,9 +42,9 @@ class Target
   }
 }
 
-function preload(){
+function preload() {
   img1 = loadImage("./img/Mush-Red.png");
-  //img2 = loadImage("./img/Mush-Yellow2.png"); 
+  img2 = loadImage("./img/Mush-Yellow1.png"); 
 }
 
 // Runs once at the start
@@ -193,26 +193,28 @@ function drawTarget(i)
   
 
   // Highlights next target
-  if (current_trial < 47 && trials[current_trial + 1] === i) {
-    stroke(color(255, 255, 0));
-    strokeWeight(8);
-    //imageMode(CENTER);
-    //img2.resize(target.w, target.w);
-    //image(img2, target.x, target.y);
-    circle(target.x, target.y, target.w);
+  if (trials[current_trial] === i)  {
+      imageMode(CENTER);
+      img1.resize(target.w, target.w);
+      image(img1, target.x, target.y);
+
+      if (current_trial < 47 && trials[current_trial + 1] === i) {
+        stroke(color(255, 255, 0));
+        strokeWeight(8);
+        noFill();
+        circle(target.x, target.y, target.w);
+      }
   }
-  // Check whether this target is the target the user should be trying to select
-  if (trials[current_trial] === i)
-  {
+ 
+    // Check whether this target is the target the user should be trying to select
+  else if (current_trial < 47 && trials[current_trial + 1] === i) {
     // Remember you are allowed to access targets (i-1) and (i+1)
     // if this is the target the user should be trying to select
     //
     //fill(color(255, 0, 0));
-    //let circle1 = circle(target.x, target.y, target.w);
     imageMode(CENTER);
-    img1.resize(target.w, target.w);
-    image(img1, target.x, target.y);
-    //img1.mask(circle1);
+    img2.resize(target.w, target.w);
+    image(img2, target.x, target.y);
   }
   // Does not draw a border if this is not the target the user
   // should be trying to select
@@ -220,7 +222,7 @@ function drawTarget(i)
     noStroke();
 
     // Draws the target
-    fill(color(125,125,125));    // Não pode ser menos!
+    fill(color(125, 125, 125)); // Não pode ser menos!
     circle(target.x, target.y, target.w);
   }
 }
