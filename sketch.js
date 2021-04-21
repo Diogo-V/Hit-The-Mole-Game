@@ -31,6 +31,7 @@ let fitts_IDs        = [];     // add the Fitts ID for each selection here (-1 w
 // Game variables
 let hit_streak       = 0;
 let img
+let hitStreakWiggle      = false;
 
 function preload() {
   img = loadImage("assets/mario-coin.png")
@@ -80,8 +81,17 @@ function draw()
 }
 
 function hitStreak() {
-  image(img, 760, 0, 30, 30)
-  text("Hit streak: " + hit_streak, 800, 20)
+  push()
+  if (hitStreakWiggle) { translate(random(-10,10),random(-10,10)); hitStreakWiggle = false; }
+  textSize(25)
+  image(img, 70, 270, 50, 50)
+  if (hit_streak > 46) fill(color(255, 0, 255))
+  else if (hit_streak > 40) fill(color(255, 0, 0))
+  else if (hit_streak > 30) fill(color(254, 147, 0))
+  else if (hit_streak > 20) fill(color(254, 230, 0))
+  else if (hit_streak > 10) fill(color(254, 230, 146))
+  text("Hit streak: " + hit_streak, 130, 286, 200, 50)
+  pop()
 }
 
 // Print and save results at the end of 48 trials
@@ -157,6 +167,7 @@ function mousePressed()
     // increasing either the 'hits' or 'misses' counters
     let fitts = -1
     if (dist(target.x, target.y, mouseX, mouseY) < target.w/2) {
+      hitStreakWiggle = true;
       hits++;
       hit_streak++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
@@ -208,24 +219,17 @@ function drawVector() {
     line(v0.x, v0.y, v1.x, v1.y);
     pop();
     push();
-
-    // Arrow
-    if (nextTarget.y != target.y || nextTarget.x != target.x){
-
+    if (nextTarget.y != target.y || nextTarget.x != target.x) {
       fill(fillColor);
       translate(target.x, target.y);
-
       if (nextTarget.y-target.y === 0) {
         if (nextTarget.x-target.x < 0) rotate(PI);  
         else if (nextTarget.x-target.x > 0) rotate(0); 
       }
       else if (nextTarget.x-target.x < 0) rotate(PI+Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
       else rotate(Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
-      
       triangle(target.w, 0, (target.w/2)+5, -(target.w/4), (target.w/2)+5, (target.w/4));
-
     }
-
     pop();
   }
 }
