@@ -228,7 +228,7 @@ function drawVector() {
       }
       else if (nextTarget.x-target.x < 0) rotate(PI+Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
       else rotate(Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
-      triangle(target.w, 0, (target.w/2)+5, -(target.w/4), (target.w/2)+5, (target.w/4));
+      triangle(target.w, 0, (target.w/3)+20, -(target.w/6), (target.w/3)+20, (target.w/6));
     }
     pop();
   }
