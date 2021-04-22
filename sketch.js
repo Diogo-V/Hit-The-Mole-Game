@@ -66,6 +66,9 @@ function draw()
 
     // Draw all 16 targets
 	for (var i = 0; i < 16; i++) drawTarget(i);
+
+    let img = loadImage('images/300px-NSMBDS_Warp_Pipe_Artwork.png')
+    image(img, 0, 0);
   }
 }
 
@@ -129,15 +132,15 @@ function printAndSavePerformance()
 
   // Custom finale
     if (accuracy >= 95 && target_w_penalty > 0.563 && target_w_penalty <= 0.631){
-        var audio = new Audio('Super Mario Stage Clear Sound.mp3');
+        var audio = new Audio('sounds/Super Mario Stage Clear Sound.mp3');
         audio.play();
     }
     else if (accuracy < 95 || target_w_penalty > 0.631){
-        var audio = new Audio('Super Mario Game Over Sound.mp3');
+        var audio = new Audio('sounds/Super Mario Game Over Sound.mp3');
         audio.play();
     }
     else {
-        var audio = new Audio('Super Mario World Clear Sound.mp3')
+        var audio = new Audio('sounds/Super Mario World Clear Sound.mp3')
         audio.play();
     }
 
@@ -157,7 +160,7 @@ function mousePressed()
     // increasing either the 'hits' or 'misses' counters
     let fitts = -1
     if (dist(target.x, target.y, mouseX, mouseY) < target.w/2) {
-      var audio = new Audio('Super Mario Coin Sound.mp3');
+      var audio = new Audio('sounds/Super Mario Coin Sound.mp3');
       audio.play();
 
       hits++;
@@ -166,7 +169,7 @@ function mousePressed()
       let width = nextTarget.w
       fitts = Math.log2(distance / width + 1)
     } else {
-      var audio = new Audio('Super Mario Firework Sound.mp3');
+      var audio = new Audio('sounds/Super Mario Firework Sound.mp3');
       audio.play();
 
       misses++;
