@@ -57,6 +57,8 @@ let tutorialPage = 1;
 let goToPage2Btt;
 let goToPage1Btt;
 let timer = 5;
+let timerWiggle = true;
+let startSound = false;
 
 // Target class (position and width)
 class Target
@@ -138,12 +140,12 @@ function displayTutorial() {
   push()
   background(220);
 
-  push()
-  textSize(30)
-  text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
-  pop()
-
   if (tutorialPage == 1) {
+
+    push()
+    textSize(30)
+    text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
+    pop()
 
     push()
     imageMode(CENTER);
@@ -194,7 +196,12 @@ function displayTutorial() {
       goToPage2Btt.position(width - goToPage2Btt.size().width - 50,height - goToPage2Btt.size().height - 50);
     }
 
-  } else {
+  } else if (tutorialPage == 2) {
+
+    push()
+    textSize(30)
+    text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
+    pop()
 
     push()
     imageMode(CENTER);
@@ -226,24 +233,36 @@ function displayTutorial() {
       endTutorialBtt.style("background-color", color(255, 0, 0))
       endTutorialBtt.style("color", color(255, 255, 255))
       endTutorialBtt.size(150, 70)
-      endTutorialBtt.mouseReleased(clearTutorial);
+      endTutorialBtt.mouseReleased(() => {goToPage1Btt.remove(); endTutorialBtt.remove(); tutorialPage = 3;});
       endTutorialBtt.position(width - endTutorialBtt.size().width - 50,height - endTutorialBtt.size().height - 50);
     }
+
+  } else {
+
+    push()
+    if (timerWiggle){ translate(random(-30,30),random(-30,30)); timerWiggle = false; }
+    textAlign(CENTER, CENTER);
+    textSize(100);
+    text(timer, width/2, height/2);
+    if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+      timer--;
+      timerWiggle = true
+    }
+    if (timer == 1 && !startSound) {
+      startSound = true;
+      let audio = new Audio('sounds/Super Mario Here We Go! Sound.mp3'); 
+      audio.play();
+    }
+    if (timer == 0) {
+      showTutorial = false;
+      testStartTime = millis();
+    }
+    pop()
 
   }
 
   pop()
 }
-
-function clearTutorial() {
-  let audio = new Audio('sounds/Super Mario Coin Sound.mp3');
-  audio.play();
-  goToPage1Btt.remove();
-  endTutorialBtt.remove();
-  showTutorial = false;
-  testStartTime = millis();
-}
-
 
 function drawLives(){
   push();
