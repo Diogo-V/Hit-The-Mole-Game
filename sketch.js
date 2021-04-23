@@ -50,6 +50,7 @@ let img
 let hitStreakWiggle      = false;
 let showTutorial = true;
 let endTutorialBtt;
+let imgVector;
 
 // Target class (position and width)
 class Target
@@ -75,6 +76,7 @@ function preload() {
   image_credits = loadImage("images/NSMB_Credits_105.png");
 
   img = loadImage("images/mario-coin.png")
+  imgVector = loadImage("images/vector.png")
 }
 
 // Runs once at the start
@@ -127,16 +129,66 @@ function draw()
 function displayTutorial() {
   push()
   background(220);
+
+  push()
+  textSize(30)
+  text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
   pop()
-  console.log("being drawn")
+
+  push()
+  imageMode(CENTER);
+  img1.resize(70, 70);
+  image(img1, width/10, height/4);
+  textSize(20)
+  text("Representação do alvo que tens de clickar para ganhar pontos", width/10 + 80, height/4 + 8);
+  pop()
+
+  push()
+  imageMode(CENTER);
+  img2.resize(70, 70);
+  image(img2, width/10, height/4 + 110);
+  textSize(20)
+  text("Próximo alvo em que vais ter de clickar", width/10 + 80, height/4 + 118);
+  pop()
+  
+  push()
+  imageMode(CENTER);
+  imgVector.resize(70, 70);
+  image(imgVector, width/10, height/4 + 220);
+  textSize(20)
+  text("Representação do vetor que te vai ajudar a guiares o olhar para o próximo alvo", width/10 + 80, height/4 + 228);
+  pop()
+
+  push()
+  imageMode(CENTER);
+  imgHeart.resize(70, 70);
+  image(imgHeart, width/10, height/4 + 330);
+  textSize(20)
+  text("Representa uma vida. No começo do jogo, terás 3 e, ao falhares um alvo, perderás uma", width/10 + 80, height/4 + 338);
+  pop()
+
+  push()
+  textSize(20)
+  text("Sugestões:\n" + 
+       " - Deixa que as setas dos vetores te guiem para o próximo alvo\n" +
+       " - No final, e dependendo do quão rápido foste, irá aparecer um de três Easter Eggs :)", 
+       width/10 - 30, height/4 + 430);
+  pop()
+
   if (!endTutorialBtt) {
     endTutorialBtt = createButton("START GAME");
+    endTutorialBtt.style("background-color", color(255, 0, 0))
+    endTutorialBtt.style("color", color(255, 255, 255))
+    endTutorialBtt.size(150, 70)
     endTutorialBtt.mouseReleased(clearTutorial);
-    endTutorialBtt.position(width / 2- endTutorialBtt.size().width / 2,height / 2 - endTutorialBtt.size().height / 2);
+    endTutorialBtt.position(width - endTutorialBtt.size().width - 50,height - endTutorialBtt.size().height - 50);
   }
+  pop()
 }
 
 function clearTutorial() {
+  let audio = new Audio('sounds/Super Mario Coin Sound.mp3');
+  audio.play();
   endTutorialBtt.remove();
   showTutorial = false;
   testStartTime = millis();
@@ -169,7 +221,7 @@ function hitStreak() {
   textSize(25)
   image(img, 70, 270, 50, 50)
   if (hit_streak > 46) fill(color(255, 0, 255))
-  else if (hit_streak > 40) fill(color(255, 0, 0))
+  else if (hit_streak > 40) fill(color(0, 147, 255))
   else if (hit_streak > 30) fill(color(254, 147, 0))
   else if (hit_streak > 20) fill(color(254, 230, 0))
   else if (hit_streak > 10) fill(color(254, 230, 146))
