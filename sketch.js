@@ -48,9 +48,13 @@ let image_credits;
 let hit_streak       = 0;
 let img
 let hitStreakWiggle      = false;
+let imgDoubleClick;
 let showTutorial = true;
 let endTutorialBtt;
 let imgVector;
+let tutorialPage = 1;
+let goToPage2Btt;
+let goToPage1Btt;
 
 // Target class (position and width)
 class Target
@@ -77,6 +81,7 @@ function preload() {
 
   img = loadImage("images/mario-coin.png")
   imgVector = loadImage("images/vector.png")
+  imgDoubleClick = loadImage("images/double_click.png")
 }
 
 // Runs once at the start
@@ -135,60 +140,94 @@ function displayTutorial() {
   text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
   pop()
 
-  push()
-  imageMode(CENTER);
-  img1.resize(70, 70);
-  image(img1, width/10, height/4);
-  textSize(20)
-  text("Representação do alvo que tens de clickar para ganhar pontos", width/10 + 80, height/4 + 8);
-  pop()
+  if (tutorialPage == 1) {
 
-  push()
-  imageMode(CENTER);
-  img2.resize(70, 70);
-  image(img2, width/10, height/4 + 110);
-  textSize(20)
-  text("Próximo alvo em que vais ter de clickar", width/10 + 80, height/4 + 118);
-  pop()
-  
-  push()
-  imageMode(CENTER);
-  imgVector.resize(70, 70);
-  image(imgVector, width/10, height/4 + 220);
-  textSize(20)
-  text("Representação do vetor que te vai ajudar a guiares o olhar para o próximo alvo", width/10 + 80, height/4 + 228);
-  pop()
+    push()
+    imageMode(CENTER);
+    img1.resize(70, 70);
+    image(img1, width/10, height/4);
+    textSize(20)
+    text("Representação do alvo que tens de clickar para ganhar pontos", width/10 + 80, height/4 + 8);
+    pop()
 
-  push()
-  imageMode(CENTER);
-  imgHeart.resize(70, 70);
-  image(imgHeart, width/10, height/4 + 330);
-  textSize(20)
-  text("Representa uma vida. No começo do jogo, terás 3 e, ao falhares um alvo, perderás uma", width/10 + 80, height/4 + 338);
-  pop()
+    push()
+    imageMode(CENTER);
+    img2.resize(70, 70);
+    image(img2, width/10, height/4 + 110);
+    textSize(20)
+    text("Próximo alvo em que vais ter de clickar", width/10 + 80, height/4 + 118);
+    pop()
 
-  push()
-  textSize(20)
-  text("Sugestões:\n" + 
-       " - Deixa que as setas dos vetores te guiem para o próximo alvo\n" +
-       " - No final, e dependendo do quão rápido foste, irá aparecer um de três Easter Eggs :)", 
-       width/10 - 30, height/4 + 430);
-  pop()
+    push()
+    imageMode(CENTER);
+    imgDoubleClick.resize(70, 70);
+    image(imgDoubleClick, width/10, height/4 + 220);
+    textSize(20)
+    text("Representa uma bola, cujo próximo alvo, também estará na mesma posição", width/10 + 80, height/4 + 228);
+    pop()
+    
+    push()
+    imageMode(CENTER);
+    imgVector.resize(70, 70);
+    image(imgVector, width/10, height/4 + 330);
+    textSize(20)
+    text("Representação do vetor que te vai ajudar a guiares o olhar para o próximo alvo", width/10 + 80, height/4 + 338);
+    pop()
 
-  if (!endTutorialBtt) {
-    endTutorialBtt = createButton("START GAME");
-    endTutorialBtt.style("background-color", color(255, 0, 0))
-    endTutorialBtt.style("color", color(255, 255, 255))
-    endTutorialBtt.size(150, 70)
-    endTutorialBtt.mouseReleased(clearTutorial);
-    endTutorialBtt.position(width - endTutorialBtt.size().width - 50,height - endTutorialBtt.size().height - 50);
+    push()
+    imageMode(CENTER);
+    imgHeart.resize(70, 70);
+    image(imgHeart, width/10, height/4 + 440);
+    textSize(20)
+    text("Representa uma vida. No começo do jogo, terás 3 e, ao falhares um alvo, perderás uma", width/10 + 80, height/4 + 448);
+    pop()
+
+    if (!goToPage2Btt) {
+      goToPage2Btt = createButton("GO TO PAGE 2");
+      goToPage2Btt.style("background-color", color(255, 0, 0))
+      goToPage2Btt.style("color", color(255, 255, 255))
+      goToPage2Btt.size(150, 70)
+      goToPage2Btt.mouseReleased(() => {tutorialPage = 2;goToPage2Btt.remove();});
+      goToPage2Btt.position(width - goToPage2Btt.size().width - 50,height - goToPage2Btt.size().height - 50);
+    }
+
+  } else {
+
+    push()
+    textSize(25)
+    text("Sugestões:\n\n" + 
+        " - Deixa que as setas dos vetores te guiem para o próximo alvo\n\n" +
+        " - No final, e dependendo do quão rápido fores, irá aparecer um de três Easter Eggs :)", 
+        width/10 - 30, height/4 + 100);
+    pop()
+
+    if (!goToPage1Btt) {
+      goToPage1Btt = createButton("GO TO PAGE 1");
+      goToPage1Btt.style("background-color", color(255, 0, 0))
+      goToPage1Btt.style("color", color(255, 255, 255))
+      goToPage1Btt.size(150, 70)
+      goToPage1Btt.mouseReleased(() => {tutorialPage = 1; goToPage1Btt.remove()});
+      goToPage1Btt.position(goToPage1Btt.size().width - 50,height - goToPage1Btt.size().height - 50);
+    }
+
+    if (!endTutorialBtt) {
+      endTutorialBtt = createButton("START GAME");
+      endTutorialBtt.style("background-color", color(255, 0, 0))
+      endTutorialBtt.style("color", color(255, 255, 255))
+      endTutorialBtt.size(150, 70)
+      endTutorialBtt.mouseReleased(clearTutorial);
+      endTutorialBtt.position(width - endTutorialBtt.size().width - 50,height - endTutorialBtt.size().height - 50);
+    }
+
   }
+
   pop()
 }
 
 function clearTutorial() {
   let audio = new Audio('sounds/Super Mario Coin Sound.mp3');
   audio.play();
+  goToPage1Btt.remove();
   endTutorialBtt.remove();
   showTutorial = false;
   testStartTime = millis();
