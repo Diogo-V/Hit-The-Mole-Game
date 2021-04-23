@@ -30,6 +30,9 @@ let fitts_IDs        = [];     // add the Fitts ID for each selection here (-1 w
 
 let img1;
 let img2;
+let imgHeart;
+let lostLife = false;
+let lives = 3;
 
 // Target class (position and width)
 class Target
@@ -43,8 +46,9 @@ class Target
 }
 
 function preload() {
-  img1 = loadImage("./img/Mush-Red.png");
-  img2 = loadImage("./img/Mush-Yellow1.png"); 
+  img1 = loadImage("./img/mush-red.svg");
+  img2 = loadImage("./img/mush-yellow.svg"); 
+  imgHeart = loadImage("./img/heart.png");
 }
 
 // Runs once at the start
@@ -71,10 +75,32 @@ function draw()
     fill(color(255,255,255));
     textAlign(LEFT);
     text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
+    drawLives();
 
     // Draw all 16 targets
 	for (var i = 0; i < 16; i++) drawTarget(i);
   }
+}
+
+
+function drawLives(){
+  push();
+  if(lives === 3){
+    image(imgHeart, 80, 370, 50, 50);
+    image(imgHeart, 130, 370, 50, 50);
+    image(imgHeart, 180, 370, 50, 50);
+  }
+
+  if (lives === 2){
+     image(imgHeart, 80, 370, 50, 50);
+     image(imgHeart, 130, 370, 50, 50);
+  }
+
+  if (lives === 1)
+    image(imgHeart, 80, 370, 50, 50);
+
+
+  pop();
 }
 
 // Print and save results at the end of 48 trials
@@ -157,6 +183,7 @@ function mousePressed()
       fitts = Math.log2(distance / width + 1)
     } else {
       misses++;
+      lives--;
     }
     if (current_trial < 47) {
       fitts_IDs.push(fitts)
@@ -248,6 +275,7 @@ function continueTest()
   hits = 0;
   misses = 0;
   fitts_IDs = [];
+  lives = 3;
 
   continue_button.remove();
 
