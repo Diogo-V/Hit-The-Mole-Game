@@ -54,9 +54,9 @@ class Target
 }
 
 function preload() {
-  img1 = loadImage("./img/mush-red.svg");
-  img2 = loadImage("./img/mush-yellow.svg"); 
-  imgHeart = loadImage("./img/heart.png");
+  img1 = loadImage("./images/mush-red.svg");
+  img2 = loadImage("./images/mush-yellow.svg"); 
+  imgHeart = loadImage("./images/heart.png");
 
   image_pipe = loadImage("images/300px-NSMBDS_Warp_Pipe_Artwork.png");
   image_goomba = loadImage("images/NSMBDS_Goomba_Walking_Sprite.gif");
@@ -95,6 +95,7 @@ function draw()
     // Draw all 16 targets
 	for (var i = 0; i < 16; i++) drawTarget(i);
 
+    //FIXME: alterar imagem para posição relativa
     image_pipe.resize(150, 463)
     image(image_pipe, 1560, 720)
   }
@@ -194,27 +195,29 @@ function printAndSavePerformance()
         audio.play();
     }
 
-  // Custom finale - images
-  if (target_w_penalty <= 0.563){
-    image_credits.resize(384, 288)
-    image(image_credits, 768, 700);
+  //TODO: alterar imagens
 
-    image_star.resize(64, 64);
-    image(image_star, 448, 700);
+  // Custom finale - images
+  //if (target_w_penalty <= 0.563){
+    //image_credits.resize(384, 288)
+    //image(image_credits, 768, 700);
+
+    //image_star.resize(64, 64);
+    //image(image_star, 448, 700);
     // credits + stars
-  }
-  else if (target_w_penalty <= 0.631){
-    image_star.resize(64, 64);
-    image(image_star, 448, 700);
+  //}
+  //else if (target_w_penalty <= 0.631){
+    //image_star.resize(64, 64);
+    //image(image_star, 448, 700);
 
     // secret pole + block
-  }
-  else {
+  //}
+  //else {
     // image_star.resize(64, 64);
-    image(image_star, 448, 700);
+    //image(image_star, 448, 700);
 
     // normal pole + goomba
-  }
+  //}
 
 }
 
