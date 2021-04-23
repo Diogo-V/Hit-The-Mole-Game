@@ -62,9 +62,9 @@ class Target
 }
 
 function preload() {
-  img1 = loadImage("./images/mush-red.svg");
-  img2 = loadImage("./images/mush-yellow.svg"); 
-  imgHeart = loadImage("./images/heart.png");
+  img1 = loadImage("images/mush-red.svg");
+  img2 = loadImage("images/mush-yellow.svg");
+  imgHeart = loadImage("images/heart.png");
 
   image_pipe = loadImage("images/300px-NSMBDS_Warp_Pipe_Artwork.png");
   image_goomba = loadImage("images/NSMBDS_Goomba_Walking_Sprite.gif");
@@ -105,11 +105,15 @@ function draw()
 
     // Draw all 16 targets
 	for (var i = 0; i < 16; i++) drawTarget(i);
-  drawVector()  // Draw path between targets on the canvas
 
-    //FIXME: alterar imagem para posição relativa
+    drawVector()  // Draw path between targets on the canvas
+
     image_pipe.resize(150, 463)
-    image(image_pipe, 1560, 720)
+    image(
+        image_pipe,
+        width * 5 / 6 - image_pipe.size().width / 2,
+        height * 2 / 3 - image_pipe.size().height / 2
+    );
   }
 }
 
@@ -207,21 +211,18 @@ function printAndSavePerformance()
   }
 
   // Custom finale - sounds
-    if (accuracy >= 95 && target_w_penalty > 0.563 && target_w_penalty <= 0.631){
-        var audio = new Audio('sounds/Super Mario Stage Clear Sound.mp3');
-        audio.play();
-    }
-    else if (accuracy < 95 || target_w_penalty > 0.631){
-        var audio = new Audio('sounds/Super Mario Game Over Sound.mp3');
-        audio.play();
-    }
-    else {
-        var audio = new Audio('sounds/Super Mario World Clear Sound.mp3')
-        audio.play();
-    }
-
-
-
+  if (accuracy >= 95 && target_w_penalty > 0.563 && target_w_penalty <= 0.631){
+      var audio = new Audio('sounds/Super Mario Stage Clear Sound.mp3');
+      audio.play();
+  }
+  else if (accuracy < 95 || target_w_penalty > 0.631){
+      var audio = new Audio('sounds/Super Mario Game Over Sound.mp3');
+      audio.play();
+  }
+  else {
+      var audio = new Audio('sounds/Super Mario World Clear Sound.mp3')
+      audio.play();
+  }
 }
 
 // Mouse button was pressed - lets test to see if hit was in the correct target
@@ -280,23 +281,38 @@ function mousePressed()
       }
 
       // Custom finale - images
+      image_credits.resize(384, 288);
+      image(
+          image_credits,
+          width / 2 - image_credits.width() / 2,
+          height * 3 / 4 - image_credits.height() / 2
+      );
+
+      image_star.resize(64, 64);
+      image(
+          image_star,
+          width / 4 - image_star.width() / 2,
+          height * 3 / 4 - image_star.height() / 2
+      );
+
+      image(
+          image_star,
+          width * 3 / 4 - image_star.width() / 2,
+          height * 3 / 4 - image_star.height() / 2
+      );
+
+
+      // here next
+
       if (target_w_penalty <= 0.563) {
-        image_credits.resize(384, 288);
-        image(image_credits, 768, 700);
-
-        image_star.resize(64, 64);
-        image(image_star, 448, 700);
         //credits + stars
+
       } else if (target_w_penalty <= 0.631) {
-        image_star.resize(64, 64);
-        image(image_star, 448, 700);
-
         //secret pole + block
-      } else {
-        image_star.resize(64, 64);
-        image(image_star, 448, 700);
 
+      } else {
         //normal pole + goomba
+
       }
     }
   }
@@ -320,8 +336,8 @@ function drawVector() {
       fill(fillColor);
       translate(target.x, target.y);
       if (nextTarget.y-target.y === 0) {
-        if (nextTarget.x-target.x < 0) rotate(PI);  
-        else if (nextTarget.x-target.x > 0) rotate(0); 
+        if (nextTarget.x-target.x < 0) rotate(PI);
+        else if (nextTarget.x-target.x > 0) rotate(0);
       }
       else if (nextTarget.x-target.x < 0) rotate(PI+Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
       else rotate(Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
@@ -336,7 +352,7 @@ function drawTarget(i)
 {
   // Get the location and size for target (i)
   let target = getTargetBounds(i);
-  
+
 
   // Highlights next target
   if (trials[current_trial] === i)  {
@@ -351,7 +367,7 @@ function drawTarget(i)
         circle(target.x, target.y, target.w);
       }
   }
- 
+
     // Check whether this target is the target the user should be trying to select
   else if (current_trial < 47 && trials[current_trial + 1] === i) {
     // Remember you are allowed to access targets (i-1) and (i+1)
