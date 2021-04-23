@@ -28,6 +28,7 @@ let current_trial    = 0;      // the current trial number (indexes into trials 
 let attempt          = 0;      // users complete each test twice to account for practice (attemps 0 and 1)
 let fitts_IDs        = [];     // add the Fitts ID for each selection here (-1 when there is a miss)
 
+
 let img1;
 let img2;
 let imgHeart;
@@ -41,6 +42,13 @@ let image_normal_pole;
 let image_block;
 let image_star;
 let image_credits;
+
+
+// Game variables
+let hit_streak       = 0;
+let img
+let hitStreakWiggle      = false;
+
 
 // Target class (position and width)
 class Target
@@ -64,6 +72,8 @@ function preload() {
   image_block = loadImage("images/QBlockNSMB.gif");
   image_stars = loadImage("images/CoinsStar.png");
   image_credits = loadImage("images/NSMB_Credits_105.png");
+
+  img = loadImage("images/mario-coin.png")
 }
 
 // Runs once at the start
@@ -91,9 +101,11 @@ function draw()
     textAlign(LEFT);
     text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
     drawLives();
+    hitStreak();
 
     // Draw all 16 targets
 	for (var i = 0; i < 16; i++) drawTarget(i);
+  drawVector()  // Draw path between targets on the canvas
 
     //FIXME: alterar imagem para posição relativa
     image_pipe.resize(150, 463)
@@ -122,6 +134,19 @@ function drawLives(){
   pop();
 }
 
+function hitStreak() {
+  push()
+  if (hitStreakWiggle) { translate(random(-10,10),random(-10,10)); hitStreakWiggle = false; }
+  textSize(25)
+  image(img, 70, 270, 50, 50)
+  if (hit_streak > 46) fill(color(255, 0, 255))
+  else if (hit_streak > 40) fill(color(255, 0, 0))
+  else if (hit_streak > 30) fill(color(254, 147, 0))
+  else if (hit_streak > 20) fill(color(254, 230, 0))
+  else if (hit_streak > 10) fill(color(254, 230, 146))
+  text("Hit streak: " + hit_streak, 130, 286, 200, 50)
+  pop()
+}
 
 // Print and save results at the end of 48 trials
 function printAndSavePerformance()
@@ -237,8 +262,9 @@ function mousePressed()
     if (dist(target.x, target.y, mouseX, mouseY) < target.w/2) {
       var audio = new Audio('sounds/Super Mario Coin Sound.mp3');
       audio.play();
-
+      hitStreakWiggle = true;
       hits++;
+      hit_streak++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
       let distance = dist(nextTarget.x, nextTarget.y, mouseX, mouseY)
       let width = nextTarget.w
@@ -249,12 +275,11 @@ function mousePressed()
 
       misses++;
       lives--;
+      hit_streak = 0;
     }
     if (current_trial < 47) {
       fitts_IDs.push(fitts)
     }
-
-    console.log(fitts_IDs);
 
     current_trial++;                 // Move on to the next trial/target
 
@@ -274,6 +299,35 @@ function mousePressed()
         continue_button.position(width/2 - continue_button.size().width/2, height/2 - continue_button.size().height/2);
       }
     }
+  }
+}
+
+function drawVector() {
+  let fillColor = "white"
+  if (current_trial < 47) {
+    let target = getTargetBounds(trials[current_trial]);
+    let v0 = createVector(target.x, target.y);
+    let nextTarget = getTargetBounds(trials[current_trial + 1]);
+    let v1 = createVector(nextTarget.x, nextTarget.y);
+    push();
+    stroke(fillColor);
+    strokeWeight(3);
+    fill(fillColor);
+    line(v0.x, v0.y, v1.x, v1.y);
+    pop();
+    push();
+    if (nextTarget.y != target.y || nextTarget.x != target.x) {
+      fill(fillColor);
+      translate(target.x, target.y);
+      if (nextTarget.y-target.y === 0) {
+        if (nextTarget.x-target.x < 0) rotate(PI);  
+        else if (nextTarget.x-target.x > 0) rotate(0); 
+      }
+      else if (nextTarget.x-target.x < 0) rotate(PI+Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
+      else rotate(Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
+      triangle(target.w, 0, (target.w/3)+20, -(target.w/6), (target.w/3)+20, (target.w/6));
+    }
+    pop();
   }
 }
 
@@ -308,6 +362,7 @@ function drawTarget(i)
     img2.resize(target.w, target.w);
     image(img2, target.x, target.y);
   }
+
   // Does not draw a border if this is not the target the user
   // should be trying to select
   else {
@@ -317,6 +372,7 @@ function drawTarget(i)
     fill(color(125, 125, 125)); // Não pode ser menos!
     circle(target.x, target.y, target.w);
   }
+
 }
 
 // Returns the location and size of a given target
@@ -341,6 +397,7 @@ function continueTest()
   misses = 0;
   fitts_IDs = [];
   lives = 3;
+  hit_streak = 0;
 
   continue_button.remove();
 
