@@ -67,10 +67,30 @@ function draw()
     // Draw all 16 targets
 	for (var i = 0; i < 16; i++) drawTarget(i);
 
-    let img = loadImage('images/300px-NSMBDS_Warp_Pipe_Artwork.png')
-    image(img, 0, 0);
+    image_pipe.resize(150, 463)
+    image(image_pipe, 1560, 720)
   }
 }
+
+
+// Image declaration
+let image_pipe;
+let image_goomba;
+let image_normal_pole;
+let image_block;
+let image_star;
+let image_credits;
+
+
+function preload() {
+    image_pipe = loadImage("images/300px-NSMBDS_Warp_Pipe_Artwork.png");
+    image_goomba = loadImage("images/NSMBDS_Goomba_Walking_Sprite.gif");
+    image_normal_pole = loadImage("images/NSMBW_Flagpole_Artwork.png");
+    image_block = loadImage("images/QBlockNSMB.gif");
+    image_stars = loadImage("images/CoinsStar.png");
+    image_credits = loadImage("images/NSMB_Credits_105.png");
+}
+
 
 // Print and save results at the end of 48 trials
 function printAndSavePerformance()
@@ -130,7 +150,7 @@ function printAndSavePerformance()
     db_ref.push(attempt_data);
   }
 
-  // Custom finale
+  // Custom finale - sounds
     if (accuracy >= 95 && target_w_penalty > 0.563 && target_w_penalty <= 0.631){
         var audio = new Audio('sounds/Super Mario Stage Clear Sound.mp3');
         audio.play();
@@ -143,6 +163,28 @@ function printAndSavePerformance()
         var audio = new Audio('sounds/Super Mario World Clear Sound.mp3')
         audio.play();
     }
+
+  // Custom finale - images
+  if (target_w_penalty <= 0.563){
+    image_credits.resize(384, 288)
+    image(image_credits, 768, 700);
+
+    image_star.resize(64, 64);
+    image(image_star, 448, 700);
+    // credits + stars
+  }
+  else if (target_w_penalty <= 0.631){
+    image_star.resize(64, 64);
+    image(image_star, 448, 700);
+
+    // secret pole + block
+  }
+  else {
+    // image_star.resize(64, 64);
+    image(image_star, 448, 700);
+
+    // normal pole + goomba
+  }
 
 }
 
