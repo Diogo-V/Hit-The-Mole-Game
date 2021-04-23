@@ -44,6 +44,10 @@ let image_block;
 let image_star;
 let image_credits;
 
+// Game variables
+let hit_streak       = 0;
+let img
+let hitStreakWiggle      = false;
 
 // Target class (position and width)
 class Target
@@ -96,9 +100,14 @@ function draw()
     fill(color(255,255,255));
     textAlign(LEFT);
     text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
+    
+    drawLives();
+    hitStreak();
 
     // Draw all 16 targets
-	for (var i = 0; i < 16; i++) drawTarget(i);
+	  for (var i = 0; i < 16; i++) drawTarget(i);
+	  
+	  drawVector()  // Draw path between targets on the canvas	
 
     image_pipe.resize(150, 463)
     image(
@@ -109,7 +118,40 @@ function draw()
   }
 }
 
+function drawLives(){
+  push();
+  if(lives === 3){
+    image(imgHeart, 80, 370, 50, 50);
+    image(imgHeart, 130, 370, 50, 50);
+    image(imgHeart, 180, 370, 50, 50);
+  }
 
+  if (lives === 2){
+     image(imgHeart, 80, 370, 50, 50);
+     image(imgHeart, 130, 370, 50, 50);
+  }
+
+  if (lives === 1)
+    image(imgHeart, 80, 370, 50, 50);
+
+  pop();
+}
+
+function hitStreak() {
+  push()
+  if (hitStreakWiggle) { translate(random(-10,10),random(-10,10)); hitStreakWiggle = false; }
+  textSize(25)
+  image(img, 70, 270, 50, 50)
+  
+  if (hit_streak > 46) fill(color(255, 0, 255))
+  else if (hit_streak > 40) fill(color(255, 0, 0))
+  else if (hit_streak > 30) fill(color(254, 147, 0))
+  else if (hit_streak > 20) fill(color(254, 230, 0))
+  else if (hit_streak > 10) fill(color(254, 230, 146))
+  
+  text("Hit streak: " + hit_streak, 130, 286, 200, 50)
+  pop()
+}
 
 // Print and save results at the end of 48 trials
 function printAndSavePerformance()
@@ -261,7 +303,9 @@ function mousePressed()
       var audio = new Audio('sounds/Super Mario Coin Sound.mp3');
       audio.play();
 
+      hitStreakWiggle = true;
       hits++;
+      hit_streak++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
       let distance = dist(nextTarget.x, nextTarget.y, mouseX, mouseY)
       let width = nextTarget.w
@@ -271,6 +315,8 @@ function mousePressed()
       audio.play();
 
       misses++;
+      lives--;
+      hit_streak = 0;
     }
     if (current_trial < 47) {
       fitts_IDs.push(fitts)
@@ -287,8 +333,7 @@ function mousePressed()
       attempt++;
 
       // If there's an attempt to go create a button to start this
-      if (attempt < 2)
-      {
+      if (attempt < 2) {
         continue_button = createButton('START 2ND ATTEMPT');
         continue_button.mouseReleased(continueTest);
         continue_button.position(width/2 - continue_button.size().width/2, height/2 - continue_button.size().height/2);
@@ -298,41 +343,77 @@ function mousePressed()
   }
 }
 
+function drawVector() {
+  let fillColor = "white"
+  if (current_trial < 47) {
+    let target = getTargetBounds(trials[current_trial]);
+    let v0 = createVector(target.x, target.y);
+    let nextTarget = getTargetBounds(trials[current_trial + 1]);
+    let v1 = createVector(nextTarget.x, nextTarget.y);
+    push();
+    stroke(fillColor);
+    strokeWeight(3);
+    fill(fillColor);
+    line(v0.x, v0.y, v1.x, v1.y);
+    pop();
+    push();
+    if (nextTarget.y != target.y || nextTarget.x != target.x) {
+      fill(fillColor);
+      translate(target.x, target.y);
+      if (nextTarget.y-target.y === 0) {
+        if (nextTarget.x-target.x < 0) rotate(PI);
+        else if (nextTarget.x-target.x > 0) rotate(0);
+      }
+      else if (nextTarget.x-target.x < 0) rotate(PI+Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
+      else rotate(Math.atan((nextTarget.y-target.y)/(nextTarget.x-target.x)));
+      triangle(target.w, 0, (target.w/3)+20, -(target.w/6), (target.w/3)+20, (target.w/6));
+    }
+    pop();
+  }
+}
+
 // Draw target on-screen
 function drawTarget(i)
 {
   // Get the location and size for target (i)
   let target = getTargetBounds(i);
 
-  // Highlights next target
-  if (current_trial < 47 && trials[current_trial + 1] === i) {
-    stroke(color(255, 255, 0));
-    strokeWeight(8);
-    circle(target.x, target.y, target.w);
-  }
-  // Check whether this target is the target the user should be trying to select
-  if (trials[current_trial] === i)
-  {
-    // Highlights the target the user should be trying to select
-    // with a white border
-    // stroke(color(220,220,220));
-    // strokeWeight(2);
 
+  // Highlights next target
+  if (trials[current_trial] === i)  {
+      imageMode(CENTER);
+      img1.resize(target.w, target.w);
+      image(img1, target.x, target.y);
+
+      if (current_trial < 47 && trials[current_trial + 1] === i) {
+        stroke(color(255, 255, 0));
+        strokeWeight(8);
+        noFill();
+        circle(target.x, target.y, target.w);
+      }
+  }
+
+    // Check whether this target is the target the user should be trying to select
+  else if (current_trial < 47 && trials[current_trial + 1] === i) {
     // Remember you are allowed to access targets (i-1) and (i+1)
     // if this is the target the user should be trying to select
     //
-    fill(color(255, 0, 0));
-    circle(target.x, target.y, target.w);
+    //fill(color(255, 0, 0));
+    imageMode(CENTER);
+    img2.resize(target.w, target.w);
+    image(img2, target.x, target.y);
   }
+
   // Does not draw a border if this is not the target the user
   // should be trying to select
   else {
     noStroke();
 
     // Draws the target
-    fill(color(125,125,125));    // Não pode ser menos!
+    fill(color(125, 125, 125)); // Não pode ser menos!
     circle(target.x, target.y, target.w);
   }
+
 }
 
 // Returns the location and size of a given target
@@ -356,6 +437,8 @@ function continueTest()
   hits = 0;
   misses = 0;
   fitts_IDs = [];
+  lives = 3;
+  hit_streak = 0;
 
   continue_button.remove();
 
