@@ -48,7 +48,8 @@ let image_credits;
 let hit_streak       = 0;
 let img
 let hitStreakWiggle      = false;
-
+let showTutorial = true;
+let endTutorialBtt;
 
 // Target class (position and width)
 class Target
@@ -70,7 +71,7 @@ function preload() {
   image_goomba = loadImage("images/NSMBDS_Goomba_Walking_Sprite.gif");
   image_normal_pole = loadImage("images/NSMBW_Flagpole_Artwork.png");
   image_block = loadImage("images/QBlockNSMB.gif");
-  image_stars = loadImage("images/CoinsStar.png");
+  image_star = loadImage("images/CoinsStar.png");
   image_credits = loadImage("images/NSMB_Credits_105.png");
 
   img = loadImage("images/mario-coin.png")
@@ -93,24 +94,52 @@ function draw()
 {
   if (draw_targets)
   {
-    // The user is interacting with the 4x4 target grid
-    background(color(0,0,0));        // sets background to black
 
-    // Print trial count at the top left-corner of the canvas
-    fill(color(255,255,255));
-    textAlign(LEFT);
-    text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
-    drawLives();
-    hitStreak();
+    if (showTutorial) {
 
-    // Draw all 16 targets
-	for (var i = 0; i < 16; i++) drawTarget(i);
-  drawVector()  // Draw path between targets on the canvas
+      displayTutorial()
 
-    //FIXME: alterar imagem para posição relativa
-    image_pipe.resize(150, 463)
-    image(image_pipe, 1560, 720)
+    } else {
+
+      // The user is interacting with the 4x4 target grid
+      background(color(0,0,0));        // sets background to black
+
+      // Print trial count at the top left-corner of the canvas
+      fill(color(255,255,255));
+      textAlign(LEFT);
+      text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
+      drawLives();
+      hitStreak();
+
+      // Draw all 16 targets
+      drawVector()  // Draw path between targets on the canvas
+      for (var i = 0; i < 16; i++) drawTarget(i);
+
+      //FIXME: alterar imagem para posição relativa
+      image_pipe.resize(150, 463)
+      image(image_pipe, 1560, 720)
+
+    }
   }
+}
+
+
+function displayTutorial() {
+  push()
+  background(220);
+  pop()
+  console.log("being drawn")
+  if (!endTutorialBtt) {
+    endTutorialBtt = createButton("START GAME");
+    endTutorialBtt.mouseReleased(clearTutorial);
+    endTutorialBtt.position(width / 2- endTutorialBtt.size().width / 2,height / 2 - endTutorialBtt.size().height / 2);
+  }
+}
+
+function clearTutorial() {
+  endTutorialBtt.remove();
+  showTutorial = false;
+  testStartTime = millis();
 }
 
 
@@ -229,7 +258,7 @@ function mousePressed()
 {
   // Only look for mouse releases during the actual test
   // (i.e., during target selections)
-  if (draw_targets)
+  if (draw_targets && !showTutorial)
   {
     // Get the location and size of the target the user should be trying to select
     let target = getTargetBounds(trials[current_trial]);
