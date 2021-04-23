@@ -52,9 +52,11 @@ let imgDoubleClick;
 let showTutorial = true;
 let endTutorialBtt;
 let imgVector;
+let imgHitStreak;
 let tutorialPage = 1;
 let goToPage2Btt;
 let goToPage1Btt;
+let timer = 5;
 
 // Target class (position and width)
 class Target
@@ -82,6 +84,7 @@ function preload() {
   img = loadImage("images/mario-coin.png")
   imgVector = loadImage("images/vector.png")
   imgDoubleClick = loadImage("images/double_click.png")
+  imgHitStreak = loadImage("images/hit_streak.png")
 }
 
 // Runs once at the start
@@ -179,7 +182,7 @@ function displayTutorial() {
     imgHeart.resize(70, 70);
     image(imgHeart, width/10, height/4 + 440);
     textSize(20)
-    text("Representa uma vida. No começo do jogo, terás 3 e, ao falhares um alvo, perderás uma", width/10 + 80, height/4 + 448);
+    text("Representa uma vida sendo que, no começo do jogo, terás 3 e, ao falhares um alvo, perderás uma", width/10 + 80, height/4 + 448);
     pop()
 
     if (!goToPage2Btt) {
@@ -194,11 +197,19 @@ function displayTutorial() {
   } else {
 
     push()
+    imageMode(CENTER);
+    image(imgHitStreak, width/10 + 70, height/4);
+    textSize(20)
+    text("Representa um hit streak counter cuja cor vai mudando à medida que o counter vai aumentando \n" +
+         "e volta a zero sempre que falhares um alvo", width/10 + 230, height/4 - 8);
+    pop()
+
+    push()
     textSize(25)
-    text("Sugestões:\n\n" + 
-        " - Deixa que as setas dos vetores te guiem para o próximo alvo\n\n" +
-        " - No final, e dependendo do quão rápido fores, irá aparecer um de três Easter Eggs :)", 
-        width/10 - 30, height/4 + 100);
+    text("Dicas & Sugestões:\n\n" + 
+         " - Deixa que as setas dos vetores te guiem para o próximo alvo;\n\n" +
+         " - No final, e dependendo do quão rápido fores, irá aparecer um de três Easter Eggs :)", 
+         width/10 - 30, height/4 + 150);
     pop()
 
     if (!goToPage1Btt) {
