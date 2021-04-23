@@ -220,29 +220,7 @@ function printAndSavePerformance()
         audio.play();
     }
 
-  //TODO: alterar imagens
 
-  // Custom finale - images
-  //if (target_w_penalty <= 0.563){
-    //image_credits.resize(384, 288)
-    //image(image_credits, 768, 700);
-
-    //image_star.resize(64, 64);
-    //image(image_star, 448, 700);
-    // credits + stars
-  //}
-  //else if (target_w_penalty <= 0.631){
-    //image_star.resize(64, 64);
-    //image(image_star, 448, 700);
-
-    // secret pole + block
-  //}
-  //else {
-    // image_star.resize(64, 64);
-    //image(image_star, 448, 700);
-
-    // normal pole + goomba
-  //}
 
 }
 
@@ -287,16 +265,38 @@ function mousePressed()
     if (current_trial === trials.length)
     {
       testEndTime = millis();
-      draw_targets = false;          // Stop showing targets and the user performance results
-      printAndSavePerformance();     // Print the user's results on-screen and send these to the DB
+      draw_targets = false; // Stop showing targets and the user performance results
+      printAndSavePerformance(); // Print the user's results on-screen and send these to the DB
       attempt++;
 
       // If there's an attempt to go create a button to start this
-      if (attempt < 2)
-      {
-        continue_button = createButton('START 2ND ATTEMPT');
+      if (attempt < 2) {
+        continue_button = createButton("START 2ND ATTEMPT");
         continue_button.mouseReleased(continueTest);
-        continue_button.position(width/2 - continue_button.size().width/2, height/2 - continue_button.size().height/2);
+        continue_button.position(
+          width / 2 - continue_button.size().width / 2,
+          height / 2 - continue_button.size().height / 2
+        );
+      }
+
+      // Custom finale - images
+      if (target_w_penalty <= 0.563) {
+        image_credits.resize(384, 288);
+        image(image_credits, 768, 700);
+
+        image_star.resize(64, 64);
+        image(image_star, 448, 700);
+        //credits + stars
+      } else if (target_w_penalty <= 0.631) {
+        image_star.resize(64, 64);
+        image(image_star, 448, 700);
+
+        //secret pole + block
+      } else {
+        image_star.resize(64, 64);
+        image(image_star, 448, 700);
+
+        //normal pole + goomba
       }
     }
   }
