@@ -34,6 +34,14 @@ let imgHeart;
 let lostLife = false;
 let lives = 3;
 
+// Image declaration EDU
+let image_pipe;
+let image_goomba;
+let image_normal_pole;
+let image_block;
+let image_star;
+let image_credits;
+
 // Target class (position and width)
 class Target
 {
@@ -49,6 +57,13 @@ function preload() {
   img1 = loadImage("./img/mush-red.svg");
   img2 = loadImage("./img/mush-yellow.svg"); 
   imgHeart = loadImage("./img/heart.png");
+
+  image_pipe = loadImage("images/300px-NSMBDS_Warp_Pipe_Artwork.png");
+  image_goomba = loadImage("images/NSMBDS_Goomba_Walking_Sprite.gif");
+  image_normal_pole = loadImage("images/NSMBW_Flagpole_Artwork.png");
+  image_block = loadImage("images/QBlockNSMB.gif");
+  image_stars = loadImage("images/CoinsStar.png");
+  image_credits = loadImage("images/NSMB_Credits_105.png");
 }
 
 // Runs once at the start
@@ -79,6 +94,9 @@ function draw()
 
     // Draw all 16 targets
 	for (var i = 0; i < 16; i++) drawTarget(i);
+
+    image_pipe.resize(150, 463)
+    image(image_pipe, 1560, 720)
   }
 }
 
@@ -102,6 +120,7 @@ function drawLives(){
 
   pop();
 }
+
 
 // Print and save results at the end of 48 trials
 function printAndSavePerformance()
@@ -160,6 +179,43 @@ function printAndSavePerformance()
     let db_ref = database.ref('G' + GROUP_NUMBER);
     db_ref.push(attempt_data);
   }
+
+  // Custom finale - sounds
+    if (accuracy >= 95 && target_w_penalty > 0.563 && target_w_penalty <= 0.631){
+        var audio = new Audio('sounds/Super Mario Stage Clear Sound.mp3');
+        audio.play();
+    }
+    else if (accuracy < 95 || target_w_penalty > 0.631){
+        var audio = new Audio('sounds/Super Mario Game Over Sound.mp3');
+        audio.play();
+    }
+    else {
+        var audio = new Audio('sounds/Super Mario World Clear Sound.mp3')
+        audio.play();
+    }
+
+  // Custom finale - images
+  if (target_w_penalty <= 0.563){
+    image_credits.resize(384, 288)
+    image(image_credits, 768, 700);
+
+    image_star.resize(64, 64);
+    image(image_star, 448, 700);
+    // credits + stars
+  }
+  else if (target_w_penalty <= 0.631){
+    image_star.resize(64, 64);
+    image(image_star, 448, 700);
+
+    // secret pole + block
+  }
+  else {
+    // image_star.resize(64, 64);
+    image(image_star, 448, 700);
+
+    // normal pole + goomba
+  }
+
 }
 
 // Mouse button was pressed - lets test to see if hit was in the correct target
@@ -176,12 +232,18 @@ function mousePressed()
     // increasing either the 'hits' or 'misses' counters
     let fitts = -1
     if (dist(target.x, target.y, mouseX, mouseY) < target.w/2) {
+      var audio = new Audio('sounds/Super Mario Coin Sound.mp3');
+      audio.play();
+
       hits++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
       let distance = dist(nextTarget.x, nextTarget.y, mouseX, mouseY)
       let width = nextTarget.w
       fitts = Math.log2(distance / width + 1)
     } else {
+      var audio = new Audio('sounds/Super Mario Firework Sound.mp3');
+      audio.play();
+
       misses++;
       lives--;
     }
