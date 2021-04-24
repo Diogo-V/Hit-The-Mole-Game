@@ -61,8 +61,8 @@ class Target
 }
 
 function preload() {
-  img1 = loadImage("images/mush-red.svg");
-  img2 = loadImage("images/mush-yellow.svg");
+  img1 = loadImage("images/Mush-Red.png");
+  img2 = loadImage("images/Mush-Yellow1.png");
   imgHeart = loadImage("images/heart.png");
 
   image_pipe = loadImage("images/300px-NSMBDS_Warp_Pipe_Artwork.png");
@@ -233,11 +233,11 @@ function printAndSavePerformance()
     }
     else if (target_w_penalty <= 0.631) {
       image_secret_pole.resize(0, 320);
-      image(image_secret_pole, width / 2, height * 3 / 4 - image_secret_pole.height / 2);
+      image(image_secret_pole, width / 2, height * 3 / 4);
 
-      image_block.resize(64, 0);
-      image(image_block, width / 4, height * 3 / 4);
-      image(image_block, width * 3 / 4, height * 3 / 4);
+      image_block.resize(48, 0);
+      image(image_block, width / 3, height * 3 / 4);
+      image(image_block, width * 2 / 3, height * 3 / 4);
     }
     else {
       image_normal_pole.resize(0, 320);
