@@ -100,21 +100,17 @@ function draw()
     fill(color(255,255,255));
     textAlign(LEFT);
     text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
-    
+
     drawLives();
     hitStreak();
 
     // Draw all 16 targets
 	  for (var i = 0; i < 16; i++) drawTarget(i);
-	  
-	  drawVector()  // Draw path between targets on the canvas	
+
+	  drawVector()  // Draw path between targets on the canvas
 
     image_pipe.resize(150, 463)
-    image(
-        image_pipe,
-        width * 7 / 8 - image_pipe.width / 2,
-        height * 7 / 8 - image_pipe.height / 2
-    );
+    image(image_pipe, width * 7 / 8, height);
   }
 }
 
@@ -142,13 +138,13 @@ function hitStreak() {
   if (hitStreakWiggle) { translate(random(-10,10),random(-10,10)); hitStreakWiggle = false; }
   textSize(25)
   image(img, 70, 270, 50, 50)
-  
+
   if (hit_streak > 46) fill(color(255, 0, 255))
   else if (hit_streak > 40) fill(color(255, 0, 0))
   else if (hit_streak > 30) fill(color(254, 147, 0))
   else if (hit_streak > 20) fill(color(254, 230, 0))
   else if (hit_streak > 10) fill(color(254, 230, 146))
-  
+
   text("Hit streak: " + hit_streak, 130, 286, 200, 50)
   pop()
 }
@@ -228,61 +224,27 @@ function printAndSavePerformance()
 
     // Custom finale - images
     if (target_w_penalty <= 0.563) {
-        image_credits.resize(384, 288);
-        image(
-            image_credits,
-            width / 2 - image_credits.width / 2,
-            height * 3 / 4 - image_credits.height / 2
-        );
+        image_credits.resize(0, 240);
+        image(image_credits, width / 2, height * 3 / 4);
 
-        image_star.resize(128, 0);
-        image(
-            image_star,
-            width / 4 - image_star.width / 2,
-            height * 3 / 4 - image_star.height / 2
-        );
-
-        image(
-            image_star,
-            width * 3 / 4 - image_star.width / 2,
-            height * 3 / 4 - image_star.height / 2
-        );
+        image_star.resize(64, 0);
+        image(image_star, width / 4, height * 3 / 4);
+        image(image_star, width * 3 / 4, height * 3 / 4);
     }
     else if (target_w_penalty <= 0.631) {
-      image_secret_pole.resize(0, 360);
-      image(
-          image_secret_pole,
-          width / 2 - image_secret_pole.width / 2,
-          height * 3 / 4 - image_secret_pole.height / 2
-      );
+      image_secret_pole.resize(0, 320);
+      image(image_secret_pole, width / 2, height * 3 / 4 - image_secret_pole.height / 2);
 
       image_block.resize(64, 0);
-      image(
-          image_block,
-          width / 4 - image_block.width / 2,
-          height * 3 / 4 - image_block.height / 2
-      );
-
-      image(
-          image_block,
-          width * 3 / 4 - image_block.width / 2,
-          height * 3 / 4 - image_block.height / 2
-      );
+      image(image_block, width / 4, height * 3 / 4);
+      image(image_block, width * 3 / 4, height * 3 / 4);
     }
     else {
-      image_normal_pole.resize(0, 360);
-      image(
-          image_normal_pole,
-          width / 2 - image_normal_pole.width / 2,
-          height * 3 / 4 - image_normal_pole.height / 2
-      );
+      image_normal_pole.resize(0, 320);
+      image(image_normal_pole, width / 2, height * 3 / 4);
 
-      image_goomba.resize(54, 0)
-      image(
-          image_goomba,
-          width * 2 / 5 - image_goomba.width / 2,
-          height * 3 / 4 + image_normal_pole.height / 2 - image_goomba.height
-      );
+      image_goomba.resize(32, 0)
+      image(image_goomba, width * 2 / 5, height * 3 / 4 + image_normal_pole.height / 2 - 16);
     }
 }
 
