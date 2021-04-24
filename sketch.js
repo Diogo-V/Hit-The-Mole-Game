@@ -47,7 +47,7 @@ let image_credits;
 // Game variables
 let hit_streak       = 0;
 let img
-let hitStreakWiggle      = false;
+//let hitStreakWiggle      = false;
 
 // Target class (position and width)
 class Target
@@ -135,9 +135,9 @@ function drawLives(){
 
 function hitStreak() {
   push()
-  if (hitStreakWiggle) { translate(random(-10,10),random(-10,10)); hitStreakWiggle = false; }
+  //if (hitStreakWiggle) { translate(random(-10,10),random(-10,10)); hitStreakWiggle = false; }
   textSize(25)
-  image(img, 70, 270, 50, 50)
+  image(img, 80, 270, 50, 50)
 
   if (hit_streak > 46) fill(color(255, 0, 255))
   else if (hit_streak > 40) fill(color(255, 0, 0))
@@ -145,7 +145,7 @@ function hitStreak() {
   else if (hit_streak > 20) fill(color(254, 230, 0))
   else if (hit_streak > 10) fill(color(254, 230, 146))
 
-  text("Hit streak: " + hit_streak, 130, 286, 200, 50)
+  text("Hit streak: " + hit_streak, 130, 265, 200, 50)
   pop()
 }
 
@@ -265,7 +265,7 @@ function mousePressed()
       var audio = new Audio('sounds/Super Mario Coin Sound.mp3');
       audio.play();
 
-      hitStreakWiggle = true;
+      //hitStreakWiggle = true;
       hits++;
       hit_streak++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
