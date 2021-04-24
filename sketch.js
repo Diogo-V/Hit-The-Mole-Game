@@ -62,7 +62,7 @@ class Target
 
 function preload() {
   img1 = loadImage("images/Mush-Red.png");
-  img2 = loadImage("images/Mush-Yellow1.png");
+  img2 = loadImage("images/Mush-Yellow3.png");
   imgHeart = loadImage("images/heart.png");
 
   image_pipe = loadImage("images/300px-NSMBDS_Warp_Pipe_Artwork.png");
