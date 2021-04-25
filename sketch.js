@@ -29,8 +29,8 @@ let attempt          = 0;      // users complete each test twice to account for 
 let fitts_IDs        = [];     // add the Fitts ID for each selection here (-1 when there is a miss)
 
 
-let img1;
-let img2;
+let image_red_mushroom;
+let image_yellow_mushroom;
 let imgHeart;
 let lostLife = false;
 let lives = 3;
@@ -72,8 +72,8 @@ class Target
 }
 
 function preload() {
-  img1 = loadImage("images/Mush-Red.png");
-  img2 = loadImage("images/Mush-Yellow3.png");
+  image_red_mushroom = loadImage("images/Mush-Red.png");
+  image_yellow_mushroom = loadImage("images/Mush-Yellow3.png");
   imgHeart = loadImage("images/heart.png");
 
   image_pipe = loadImage("images/300px-NSMBDS_Warp_Pipe_Artwork.png");
@@ -144,23 +144,24 @@ function displayTutorial() {
 
     push()
     textSize(30)
-    text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
+    textAlign(CENTER);
+    text("INSTRUÇÕES", width / 2 - 310, 40, 620);
     pop()
 
     push()
     imageMode(CENTER);
-    img1.resize(70, 70);
-    image(img1, width/10, height/4);
+    image_red_mushroom.resize(70, 70);
+    image(image_red_mushroom, width/10, height/4);
     textSize(20)
-    text("Representação do alvo que tens de clickar para ganhar pontos", width/10 + 80, height/4 + 8);
+    text("Alvo atual", width/10 + 80, height/4 + 8);
     pop()
 
     push()
     imageMode(CENTER);
-    img2.resize(70, 70);
-    image(img2, width/10, height/4 + 110);
+    image_yellow_mushroom.resize(70, 70);
+    image(image_yellow_mushroom, width/10, height/4 + 110);
     textSize(20)
-    text("Próximo alvo em que vais ter de clickar", width/10 + 80, height/4 + 118);
+    text("Próximo alvo", width/10 + 80, height/4 + 118);
     pop()
 
     push()
@@ -168,7 +169,7 @@ function displayTutorial() {
     imgDoubleClick.resize(70, 70);
     image(imgDoubleClick, width/10, height/4 + 220);
     textSize(20)
-    text("Representa uma bola, cujo próximo alvo, também estará na mesma posição", width/10 + 80, height/4 + 228);
+    text("Alvo atual e próximo", width/10 + 80, height/4 + 228);
     pop()
     
     push()
@@ -176,7 +177,7 @@ function displayTutorial() {
     imgVector.resize(70, 70);
     image(imgVector, width/10, height/4 + 330);
     textSize(20)
-    text("Representação do vetor que te vai ajudar a guiares o olhar para o próximo alvo", width/10 + 80, height/4 + 338);
+    text("Indica a direção do próximo alvo", width/10 + 80, height/4 + 338);
     pop()
 
     push()
@@ -184,7 +185,7 @@ function displayTutorial() {
     imgHeart.resize(70, 70);
     image(imgHeart, width/10, height/4 + 440);
     textSize(20)
-    text("Representa uma vida sendo que, no começo do jogo, terás 3 e, ao falhares um alvo, perderás uma", width/10 + 80, height/4 + 448);
+    text("Vida", width/10 + 80, height/4 + 448);
     pop()
 
     if (!goToPage2Btt) {
@@ -200,7 +201,8 @@ function displayTutorial() {
 
     push()
     textSize(30)
-    text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
+    textAlign(CENTER);
+    text("INSTRUÇÕES", width / 2 - 310, 40, 620);
     pop()
 
     push()
@@ -213,8 +215,7 @@ function displayTutorial() {
 
     push()
     textSize(25)
-    text("Dicas & Sugestões:\n\n" + 
-         " - Deixa que as setas dos vetores te guiem para o próximo alvo;\n\n" +
+    text("Dicas & Sugestões:\n\n" +  +
          " - No final, e dependendo do quão rápido fores, irá aparecer um de três Easter Eggs :)", 
          width/10 - 30, height/4 + 150);
     pop()
@@ -494,8 +495,8 @@ function drawTarget(i)
   // Highlights next target
   if (trials[current_trial] === i)  {
       imageMode(CENTER);
-      img1.resize(target.w, target.w);
-      image(img1, target.x, target.y);
+      image_red_mushroom.resize(target.w, target.w);
+      image(image_red_mushroom, target.x, target.y);
 
       if (current_trial < 47 && trials[current_trial + 1] === i) {
         stroke(color(255, 255, 0));
@@ -512,8 +513,8 @@ function drawTarget(i)
     //
     //fill(color(255, 0, 0));
     imageMode(CENTER);
-    img2.resize(target.w, target.w);
-    image(img2, target.x, target.y);
+    image_yellow_mushroom.resize(target.w, target.w);
+    image(image_yellow_mushroom, target.x, target.y);
   }
 
   // Does not draw a border if this is not the target the user
