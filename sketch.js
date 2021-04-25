@@ -48,6 +48,17 @@ let image_credits;
 let hit_streak       = 0;
 let img
 //let hitStreakWiggle      = false;
+let imgDoubleClick;
+let showTutorial = true;
+let endTutorialBtt;
+let imgVector;
+let imgHitStreak;
+let tutorialPage = 1;
+let goToPage2Btt;
+let goToPage1Btt;
+let timer = 5;
+let timerWiggle = true;
+let startSound = false;
 
 // Target class (position and width)
 class Target
@@ -74,6 +85,9 @@ function preload() {
   image_credits = loadImage("images/NSMB_Credits_105.png");
 
   img = loadImage("images/mario-coin.png")
+  imgVector = loadImage("images/vector.png")
+  imgDoubleClick = loadImage("images/double_click.png")
+  imgHitStreak = loadImage("images/hit_streak.png")
 }
 
 // Runs once at the start
@@ -93,25 +107,161 @@ function draw()
 {
   if (draw_targets)
   {
-    // The user is interacting with the 4x4 target grid
-    background(color(0,0,0));        // sets background to black
 
-    // Print trial count at the top left-corner of the canvas
-    fill(color(255,255,255));
-    textAlign(LEFT);
-    text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
+    if (showTutorial) {
 
-    drawLives();
-    hitStreak();
+      displayTutorial()
 
-    // Draw all 16 targets
-	  for (var i = 0; i < 16; i++) drawTarget(i);
+    } else {
 
-	  drawVector()  // Draw path between targets on the canvas
+      // The user is interacting with the 4x4 target grid
+      background(color(0,0,0));        // sets background to black
 
-    image_pipe.resize(150, 463)
-    image(image_pipe, width * 7 / 8, height);
+      // Print trial count at the top left-corner of the canvas
+      fill(color(255,255,255));
+      textAlign(LEFT);
+      text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
+      drawLives();
+      hitStreak();
+
+      // Draw all 16 targets
+      drawVector()  // Draw path between targets on the canvas
+      for (var i = 0; i < 16; i++) drawTarget(i);
+
+      image_pipe.resize(150, 463)
+      image(image_pipe, width * 7 / 8, height);
+
+    }
   }
+}
+
+
+function displayTutorial() {
+  push()
+  background(220);
+
+  if (tutorialPage == 1) {
+
+    push()
+    textSize(30)
+    text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
+    pop()
+
+    push()
+    imageMode(CENTER);
+    img1.resize(70, 70);
+    image(img1, width/10, height/4);
+    textSize(20)
+    text("Representação do alvo que tens de clickar para ganhar pontos", width/10 + 80, height/4 + 8);
+    pop()
+
+    push()
+    imageMode(CENTER);
+    img2.resize(70, 70);
+    image(img2, width/10, height/4 + 110);
+    textSize(20)
+    text("Próximo alvo em que vais ter de clickar", width/10 + 80, height/4 + 118);
+    pop()
+
+    push()
+    imageMode(CENTER);
+    imgDoubleClick.resize(70, 70);
+    image(imgDoubleClick, width/10, height/4 + 220);
+    textSize(20)
+    text("Representa uma bola, cujo próximo alvo, também estará na mesma posição", width/10 + 80, height/4 + 228);
+    pop()
+    
+    push()
+    imageMode(CENTER);
+    imgVector.resize(70, 70);
+    image(imgVector, width/10, height/4 + 330);
+    textSize(20)
+    text("Representação do vetor que te vai ajudar a guiares o olhar para o próximo alvo", width/10 + 80, height/4 + 338);
+    pop()
+
+    push()
+    imageMode(CENTER);
+    imgHeart.resize(70, 70);
+    image(imgHeart, width/10, height/4 + 440);
+    textSize(20)
+    text("Representa uma vida sendo que, no começo do jogo, terás 3 e, ao falhares um alvo, perderás uma", width/10 + 80, height/4 + 448);
+    pop()
+
+    if (!goToPage2Btt) {
+      goToPage2Btt = createButton("GO TO PAGE 2");
+      goToPage2Btt.style("background-color", color(255, 0, 0))
+      goToPage2Btt.style("color", color(255, 255, 255))
+      goToPage2Btt.size(150, 70)
+      goToPage2Btt.mouseReleased(() => {tutorialPage = 2;goToPage2Btt.remove();});
+      goToPage2Btt.position(width - goToPage2Btt.size().width - 50,height - goToPage2Btt.size().height - 50);
+    }
+
+  } else if (tutorialPage == 2) {
+
+    push()
+    textSize(30)
+    text("INSTRUÇÕES PARA HARDCORE GAMERS", width / 2 - 310, 40, 620);
+    pop()
+
+    push()
+    imageMode(CENTER);
+    image(imgHitStreak, width/10 + 70, height/4);
+    textSize(20)
+    text("Representa um hit streak counter cuja cor vai mudando à medida que o counter vai aumentando \n" +
+         "e volta a zero sempre que falhares um alvo", width/10 + 230, height/4 - 8);
+    pop()
+
+    push()
+    textSize(25)
+    text("Dicas & Sugestões:\n\n" + 
+         " - Deixa que as setas dos vetores te guiem para o próximo alvo;\n\n" +
+         " - No final, e dependendo do quão rápido fores, irá aparecer um de três Easter Eggs :)", 
+         width/10 - 30, height/4 + 150);
+    pop()
+
+    if (!goToPage1Btt) {
+      goToPage1Btt = createButton("GO TO PAGE 1");
+      goToPage1Btt.style("background-color", color(255, 0, 0))
+      goToPage1Btt.style("color", color(255, 255, 255))
+      goToPage1Btt.size(150, 70)
+      goToPage1Btt.mouseReleased(() => {tutorialPage = 1; goToPage1Btt.remove()});
+      goToPage1Btt.position(goToPage1Btt.size().width - 50,height - goToPage1Btt.size().height - 50);
+    }
+
+    if (!endTutorialBtt) {
+      endTutorialBtt = createButton("START GAME");
+      endTutorialBtt.style("background-color", color(255, 0, 0))
+      endTutorialBtt.style("color", color(255, 255, 255))
+      endTutorialBtt.size(150, 70)
+      endTutorialBtt.mouseReleased(() => {goToPage1Btt.remove(); endTutorialBtt.remove(); tutorialPage = 3;});
+      endTutorialBtt.position(width - endTutorialBtt.size().width - 50,height - endTutorialBtt.size().height - 50);
+    }
+
+  } else {
+
+    push()
+    if (timerWiggle){ translate(random(-30,30),random(-30,30)); timerWiggle = false; }
+    textAlign(CENTER, CENTER);
+    textSize(100);
+    text(timer, width/2, height/2);
+    if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+      timer--;
+      timerWiggle = true
+    }
+    if (timer == 1 && !startSound) {
+      startSound = true;
+      let audio = new Audio('sounds/Super Mario Here We Go! Sound.mp3'); 
+      audio.play();
+    }
+    if (timer == 0) {
+      showTutorial = false;
+      testStartTime = millis();
+    }
+    pop()
+
+  }
+
+  pop()
 }
 
 function drawLives(){
@@ -140,7 +290,7 @@ function hitStreak() {
   image(img, 80, 270, 50, 50)
 
   if (hit_streak > 46) fill(color(255, 0, 255))
-  else if (hit_streak > 40) fill(color(255, 0, 0))
+  else if (hit_streak > 40) fill(color(0, 147, 255))
   else if (hit_streak > 30) fill(color(254, 147, 0))
   else if (hit_streak > 20) fill(color(254, 230, 0))
   else if (hit_streak > 10) fill(color(254, 230, 146))
@@ -253,7 +403,7 @@ function mousePressed()
 {
   // Only look for mouse releases during the actual test
   // (i.e., during target selections)
-  if (draw_targets)
+  if (draw_targets && !showTutorial)
   {
     // Get the location and size of the target the user should be trying to select
     let target = getTargetBounds(trials[current_trial]);
