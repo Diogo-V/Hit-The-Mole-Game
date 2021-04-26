@@ -55,7 +55,7 @@ let endTutorialBtt;
 let imgVector;
 let imgHitStreak;
 let tutorialPage = 1;
-let timer = 5;
+let timer = 3;
 let timerWiggle = true;
 let startSound = false;
 
@@ -228,7 +228,7 @@ function displayTutorial() {
       timer--;
     }
     if (timer == 0) {
-      song.stop();
+      //song.stop();
       showTutorial = false;
       testStartTime = millis();
     }
@@ -427,6 +427,8 @@ function mousePressed() {
 
     // Check if the user has completed all 48 trials
     if (current_trial === trials.length) {
+      //TODO: tirar
+      song.stop();
       testEndTime = millis();
       draw_targets = false; // Stop showing targets and the user performance results
       printAndSavePerformance(); // Print the user's results on-screen and send these to the DB
@@ -541,6 +543,7 @@ function getTargetBounds(i) {
 
 // Evoked after the user starts its second (and last) attempt
 function continueTest() {
+  song.play();
   // Re-randomize the trial order
   shuffle(trials, true);
   current_trial = 0;
