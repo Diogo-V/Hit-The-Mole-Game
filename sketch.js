@@ -100,6 +100,7 @@ function setup() {
   drawUserIDScreen(); // draws the user input screen (student number and display size)
 
   song = createAudio("sounds/Super Mario 64 Soundtrack - Title Theme.mp3");
+  fitts_IDs.push(-1)
 }
 
 // Runs every frame and redraws the screen
@@ -419,6 +420,7 @@ function mousePressed() {
     }
     if (current_trial < 47) {
       fitts_IDs.push(fitts);
+      console.log(fitts_IDs)
     }
 
     current_trial++; // Move on to the next trial/target
@@ -552,6 +554,7 @@ function continueTest() {
   hit_streak = 0;
 
   continue_button.remove();
+  fitts_IDs.push(-1)
 
   // Shows the targets again
   draw_targets = true;
