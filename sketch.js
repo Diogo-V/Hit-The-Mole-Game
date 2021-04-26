@@ -201,7 +201,7 @@ function displayTutorial() {
       "Depending of your perfomance, \n" +
         "you will see one of the 3 Easter Eggs",
       width / 2,
-      2*(height / 3)
+      height / 4 + 424
     );
     pop();
 
@@ -216,7 +216,7 @@ function displayTutorial() {
       });
       endTutorialBtt.position(
         width / 2 - 70,
-        height - endTutorialBtt.size().height - 100
+        5*(height/6),
       );
     }
   } else {
