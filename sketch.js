@@ -209,14 +209,14 @@ function displayTutorial() {
       endTutorialBtt = createButton("START GAME");
       endTutorialBtt.style("background-color", color(255, 0, 0));
       endTutorialBtt.style("color", color(255, 255, 255));
-      endTutorialBtt.size(150, 70);
+      endTutorialBtt.size(150, height/15);
       endTutorialBtt.mouseReleased(() => {
         tutorialPage = 2;
         endTutorialBtt.remove();
       });
       endTutorialBtt.position(
         width / 2 - 70,
-        5*(height/6),
+        9*(height/10),
       );
     }
   } else {
