@@ -201,7 +201,7 @@ function displayTutorial() {
       "Depending of your perfomance, \n" +
         "you will see one of the 3 Easter Eggs",
       width / 2,
-      height / 4 + 424
+      2*(height / 3)
     );
     pop();
 
