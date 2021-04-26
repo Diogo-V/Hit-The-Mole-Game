@@ -400,7 +400,7 @@ function mousePressed() {
     // increasing either the 'hits' or 'misses' counters
     let fitts = -1;
     if (dist(target.x, target.y, mouseX, mouseY) < target.w / 2) {
-      var audio = new Audio("sounds/Super Mario Coin Sound.mp3");
+      var audio = new Audio("sounds/Super-Mario-Coin-Sound-Baixo.mp3");
       audio.play();
 
       //hitStreakWiggle = true;
