@@ -208,21 +208,16 @@ function displayTutorial() {
 }
 
 function drawLives() {
-  push();
-  if (lives === 3) {
-    image(imgHeart, 80, 370, 50, 50);
-    image(imgHeart, 130, 370, 50, 50);
-    image(imgHeart, 180, 370, 50, 50);
-  }
+  imgHeart.resize(70, 0);
 
-  if (lives === 2) {
-    image(imgHeart, 80, 370, 50, 50);
-    image(imgHeart, 130, 370, 50, 50);
-  }
+  if (lives >= 1)
+    image(imgHeart, width / 6 - 100, 370);
 
-  if (lives === 1) image(imgHeart, 80, 370, 50, 50);
+  if (lives >= 2)
+    image(imgHeart, width / 6, 370);
 
-  pop();
+  if (lives >= 3)
+    image(imgHeart, width / 6 + 100, 370);
 }
 
 // function hitStreak() {
