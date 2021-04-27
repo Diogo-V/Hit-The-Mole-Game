@@ -7,7 +7,7 @@
 
 // Database (CHANGE THESE!)
 const GROUP_NUMBER = 31; // Add your group number here as an integer (e.g., 2, 3)
-const BAKE_OFF_DAY = true; // Set to 'true' before sharing during the simulation and bake-off days
+const BAKE_OFF_DAY = false; // Set to 'true' before sharing during the simulation and bake-off days
 
 // Target and grid properties (DO NOT CHANGE!)
 let PPI, PPCM;
@@ -46,14 +46,14 @@ let image_star;
 let image_credits;
 
 // Game variables
-let hit_streak = 0;
+//let hit_streak = 0;
 let img;
 //let hitStreakWiggle      = false;
 let imgDoubleClick;
 let showTutorial = true;
 let endTutorialBtt;
 let imgVector;
-let imgHitStreak;
+//let imgHitStreak;
 let tutorialPage = 1;
 let timer = 3;
 let timerWiggle = true;
@@ -84,7 +84,7 @@ function preload() {
   img = loadImage("images/mario-coin.png");
   imgVector = loadImage("images/vector.png");
   imgDoubleClick = loadImage("images/double_click.png");
-  imgHitStreak = loadImage("images/hit_streak.png");
+  //imgHitStreak = loadImage("images/hit_streak.png");
 
   image_mistery_box = loadImage("images/mistery-box.png");
 }
@@ -117,7 +117,7 @@ function draw() {
       textAlign(LEFT);
       text("Trial " + (current_trial + 1) + " of " + trials.length, 50, 20);
       drawLives();
-      hitStreak();
+      //hitStreak();
 
       // Draw all 16 targets
       drawVector(); // Draw path between targets on the canvas
@@ -176,6 +176,7 @@ function displayTutorial() {
     text("Live", width / 2 + 150, height / 4 + 58);
     pop();
 
+    // TODO: tirar do tutorial
     push();
     imageMode(CENTER);
     image_star.resize(70, 70);
@@ -256,20 +257,20 @@ function drawLives() {
   pop();
 }
 
-function hitStreak() {
-  push();
-  textSize(25);
-  image(img, 80, 270, 50, 50);
+// function hitStreak() {
+//   push();
+//   textSize(25);
+//   image(img, 80, 270, 50, 50);
 
-  if (hit_streak > 46) fill(color(255, 0, 255));
-  else if (hit_streak > 40) fill(color(0, 147, 255));
-  else if (hit_streak > 30) fill(color(254, 147, 0));
-  else if (hit_streak > 20) fill(color(254, 230, 0));
-  else if (hit_streak > 10) fill(color(254, 230, 146));
+//   if (hit_streak > 46) fill(color(255, 0, 255));
+//   else if (hit_streak > 40) fill(color(0, 147, 255));
+//   else if (hit_streak > 30) fill(color(254, 147, 0));
+//   else if (hit_streak > 20) fill(color(254, 230, 0));
+//   else if (hit_streak > 10) fill(color(254, 230, 146));
 
-  text("Hit streak: " + hit_streak, 130, 265, 200, 50);
-  pop();
-}
+//   text("Hit streak: " + hit_streak, 130, 265, 200, 50);
+//   pop();
+// }
 
 // Print and save results at the end of 48 trials
 function printAndSavePerformance() {
@@ -405,7 +406,7 @@ function mousePressed() {
 
       //hitStreakWiggle = true;
       hits++;
-      hit_streak++;
+      //hit_streak++;
       let nextTarget = getTargetBounds(trials[current_trial + 1]);
       let distance = dist(nextTarget.x, nextTarget.y, mouseX, mouseY);
       let width = nextTarget.w;
@@ -416,7 +417,7 @@ function mousePressed() {
 
       misses++;
       lives--;
-      hit_streak = 0;
+      //hit_streak = 0;
     }
     if (current_trial < 47) {
       fitts_IDs.push(fitts);
@@ -429,6 +430,7 @@ function mousePressed() {
     if (current_trial === trials.length) {
       //TODO: tirar
       song.stop();
+      
       testEndTime = millis();
       draw_targets = false; // Stop showing targets and the user performance results
       printAndSavePerformance(); // Print the user's results on-screen and send these to the DB
@@ -543,6 +545,7 @@ function getTargetBounds(i) {
 
 // Evoked after the user starts its second (and last) attempt
 function continueTest() {
+  
   song.play();
   // Re-randomize the trial order
   shuffle(trials, true);
@@ -554,10 +557,10 @@ function continueTest() {
   misses = 0;
   fitts_IDs = [];
   lives = 3;
-  hit_streak = 0;
+  //hit_streak = 0;
 
   continue_button.remove();
-  fitts_IDs.push(-1)
+  fitts_IDs.push(-1);
 
   // Shows the targets again
   draw_targets = true;
