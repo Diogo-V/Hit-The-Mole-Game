@@ -154,55 +154,21 @@ function displayTutorial() {
 
     push();
     imageMode(CENTER);
-    image_yellow_mushroom.resize(70, 70);
-    image(image_yellow_mushroom, width / 3, height / 4 + 160);
+    imgDoubleClick.resize(70, 70);
+    image(imgDoubleClick, width / 2 + 100, height / 4 + 50);
     textSize(20);
-    text("Next Target", width / 3 + 80, height / 4 + 168);
-    pop();
-
-    push();
-    imageMode(CENTER);
-    imgDoubleClick.resize(80, 80);
-    image(imgDoubleClick, width / 3, height / 4 + 270);
-    textSize(20);
-    text("Current + Next Target", width / 3 + 80, height / 4 + 298);
-    pop();
-
-    push();
-    imageMode(CENTER);
-    imgHeart.resize(70, 70);
-    image(imgHeart, width / 2 + 100, height / 4 + 50);
-    textSize(20);
-    text("Live", width / 2 + 150, height / 4 + 58);
-    pop();
-
-    // TODO: tirar do tutorial
-    push();
-    imageMode(CENTER);
-    image_star.resize(70, 70);
-    image(image_star, width / 2 + 100, height / 4 + 160);
-    textSize(20);
-    text("Hit Streak Counter", width / 2 + 150, height / 4 + 168);
-    pop();
-
-    push();
-    imageMode(CENTER);
-    imgVector.resize(60, 60);
-    image(imgVector, width / 2 + 100, height / 4 + 270);
-    textSize(20);
-    text("Direction of the Next Target", width / 2 + 150, height / 4 + 298);
+    text("Current + Next Target", width / 2 + 150, height / 4 + 58);
     pop();
 
     push();
     imageMode(CENTER);
     image_mistery_box.resize(70, 70);
-    image(image_mistery_box, width / 2 - 100, height / 4 + 430);
+    image(image_mistery_box,  width / 3, height / 4 + 200);
     textSize(20);
     text(
-      "Depending of your perfomance, \n" +
-        "you will see one of the 3 Easter Eggs",
-      width / 2,
-      height / 4 + 424
+      "Depending on your performance, you will see one\n" +
+      "of 3 super mario related Easter Eggs",
+        width / 3 + 80, height / 4 + 192
     );
     pop();
 
@@ -217,7 +183,7 @@ function displayTutorial() {
       });
       endTutorialBtt.position(
         width / 2 - 70,
-        9*(height/10),
+        3*(height/4),
       );
     }
   } else {
