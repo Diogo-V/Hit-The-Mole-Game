@@ -33,7 +33,9 @@ let image_yellow_mushroom;
 let imgHeart;
 let lostLife = false;
 let lives = 3;
-let song;
+let sound_bg;
+let sound_click;
+let sound_end;
 let isPlaying = false;
 
 // Image declaration EDU
@@ -99,7 +101,7 @@ function setup() {
   textFont("Arial", 18); // font size for the majority of the text
   drawUserIDScreen(); // draws the user input screen (student number and display size)
 
-  song = createAudio("sounds/Super Mario 64 Soundtrack - Title Theme.mp3");
+  sound_bg = createAudio("sounds/Super Mario 64 Soundtrack - Title Theme.mp3");
   fitts_IDs.push(-1)
 }
 
@@ -134,8 +136,8 @@ function displayTutorial() {
   background(0);
   fill(255, 255, 255);
 
-  song.play();
-  song.volume(0.075);
+  sound_bg.play();
+  sound_bg.volume(0.075);
 
   if (tutorialPage == 1) {
     push();
@@ -195,7 +197,7 @@ function displayTutorial() {
       timer--;
     }
     if (timer == 0) {
-      //song.stop();
+      //sound_bg.stop();
       showTutorial = false;
       testStartTime = millis();
     }
@@ -317,14 +319,14 @@ function printAndSavePerformance() {
 
   // Custom finale - sounds
   if (accuracy >= 95 && target_w_penalty > 0.563 && target_w_penalty <= 0.631) {
-    var audio = new Audio("sounds/Super Mario Stage Clear Sound.mp3");
-    audio.play();
+    sound_end = new Audio("sounds/Super Mario Stage Clear Sound.mp3");
+    sound_end.play();
   } else if (accuracy < 95 || target_w_penalty > 0.631) {
-    var audio = new Audio("sounds/Super Mario Game Over Sound.mp3");
-    audio.play();
+    sound_end = new Audio("sounds/Super Mario Game Over Sound.mp3");
+    sound_end.play();
   } else {
-    var audio = new Audio("sounds/Super Mario World Clear Sound.mp3");
-    audio.play();
+    sound_end = new Audio("sounds/Super Mario World Clear Sound.mp3");
+    sound_end.play();
   }
 
   // Custom finale - images
@@ -367,8 +369,8 @@ function mousePressed() {
     // increasing either the 'hits' or 'misses' counters
     let fitts = -1;
     if (dist(target.x, target.y, mouseX, mouseY) < target.w / 2) {
-      var audio = new Audio("sounds/Super-Mario-Coin-Sound-Baixo.mp3");
-      audio.play();
+      sound_click = new Audio("sounds/Super-Mario-Coin-Sound-Baixo.mp3");
+      sound_click.play();
 
       //hitStreakWiggle = true;
       hits++;
@@ -378,8 +380,8 @@ function mousePressed() {
       let width = nextTarget.w;
       fitts = Math.log2(distance / width + 1);
     } else {
-      var audio = new Audio("sounds/Super Mario Firework Sound.mp3");
-      audio.play();
+      sound_click = new Audio("sounds/Super Mario Firework Sound.mp3");
+      sound_click.play();
 
       misses++;
       lives--;
@@ -395,8 +397,8 @@ function mousePressed() {
     // Check if the user has completed all 48 trials
     if (current_trial === trials.length) {
       //TODO: tirar
-      song.stop();
-      
+      sound_bg.stop();
+
       testEndTime = millis();
       draw_targets = false; // Stop showing targets and the user performance results
       printAndSavePerformance(); // Print the user's results on-screen and send these to the DB
@@ -511,8 +513,10 @@ function getTargetBounds(i) {
 
 // Evoked after the user starts its second (and last) attempt
 function continueTest() {
-  
-  song.play();
+
+  sound_end.pause();
+  sound_end.current_time = 0;
+  sound_bg.play();
   // Re-randomize the trial order
   shuffle(trials, true);
   current_trial = 0;
