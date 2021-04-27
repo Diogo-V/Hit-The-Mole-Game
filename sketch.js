@@ -135,7 +135,7 @@ function displayTutorial() {
   fill(255, 255, 255);
 
   song.play();
-  song.volume(0.5);
+  song.volume(0.05);
 
   if (tutorialPage == 1) {
     push();
